@@ -1,6 +1,6 @@
 {
 "type": "FeatureCollection",
-"name": "cheongna_rail_2023",
+"name": "cheongna_rail_60",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
 { "type": "Feature", "properties": { "id": "0", "linenm": "수인선", "statnm": "인천", "x_5179": "921961.3068", "y_5179": "1942281.998", "lng": "126.61739620871003", "lat": "37.476473822211084", "begin": "2016-02-27", "effective_begin": null, "geometry_wkt": "POINT (921961.3068 1942281.998)", "origin_distance_m": 6399.6901566461875, "travel_time_min": 57.516666666666666 }, "geometry": { "type": "Point", "coordinates": [ 126.617396208710034, 37.476473822211084 ] } },

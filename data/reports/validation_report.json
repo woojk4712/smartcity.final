@@ -1,0 +1,46 @@
+{
+  "pangyo": {
+    "label": "제1판교테크노밸리",
+    "boundary_source": "성남판교 도시지원시설용지 기준: 업로드 소재지 PNU와 연속지적도 병합",
+    "boundary_area_m2": 1055633.9,
+    "building_count": 1,
+    "parcel_count": 152,
+    "aggregation_count_population": 13,
+    "aggregation_count_households": 13,
+    "aggregation_count_businesses": 13,
+    "aggregation_count_workers": 13,
+    "total_population": 1971,
+    "total_households": 588,
+    "total_businesses": 1694,
+    "total_workers": 58889,
+    "landuse_mix_index": 0.323,
+    "avg_floor_area_ratio": 446.0,
+    "job_housing_ratio": 29.878,
+    "building_main_use_composition": [
+      {
+        "main_use": "업무시설",
+        "count": 1,
+        "share": 1.0
+      }
+    ]
+  },
+  "cheongna": {
+    "label": "청라국제업무지구",
+    "boundary_source": "청라국제업무지구 기준: 업로드 청라 PNU 중 토지이용계획 상업/준주거 필지와 청라동 93~107 지번대 필터",
+    "boundary_area_m2": 1054672.4,
+    "building_count": 0,
+    "parcel_count": 56,
+    "aggregation_count_population": 26,
+    "aggregation_count_households": 26,
+    "aggregation_count_businesses": 26,
+    "aggregation_count_workers": 26,
+    "total_population": 8399,
+    "total_households": 2481,
+    "total_businesses": 804,
+    "total_workers": 2387,
+    "landuse_mix_index": 0.497,
+    "avg_floor_area_ratio": null,
+    "job_housing_ratio": 0.284,
+    "building_main_use_composition": []
+  }
+}

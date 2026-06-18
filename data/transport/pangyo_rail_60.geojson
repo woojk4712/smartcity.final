@@ -1,6 +1,6 @@
 {
 "type": "FeatureCollection",
-"name": "pangyo_rail_2023",
+"name": "pangyo_rail_60",
 "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
 "features": [
 { "type": "Feature", "properties": { "id": "24", "linenm": "수인선", "statnm": "오목천", "x_5179": "952419.2206", "y_5179": "1916160.595", "lng": "126.96353008424018", "lat": "37.2431000443475", "begin": "2020-09-12", "effective_begin": null, "geometry_wkt": "POINT (952419.2206 1916160.595)", "origin_distance_m": 21801.896137378975, "travel_time_min": 59.416666666666679 }, "geometry": { "type": "Point", "coordinates": [ 126.963530084240176, 37.243100044347507 ] } },

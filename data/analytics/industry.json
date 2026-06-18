@@ -1,7 +1,7 @@
 [
   {
     "area_key": "pangyo",
-    "label": "판교 1테크노밸리",
+    "label": "제1판교테크노밸리",
     "source": "sgis_2023_csv_district_total_until_aggregation_polygons_added",
     "allocated_businesses": 47094.0,
     "allocated_workers": 354723.0,
@@ -163,7 +163,7 @@
   },
   {
     "area_key": "cheongna",
-    "label": "청라국제도시",
+    "label": "청라국제업무지구",
     "source": "sgis_2023_csv_district_total_until_aggregation_polygons_added",
     "allocated_businesses": 57576.0,
     "allocated_workers": 229752.0,
