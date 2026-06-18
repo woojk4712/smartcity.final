@@ -22,15 +22,8 @@ function methodLabel(method) {
   return method || '자료 없음';
 }
 
-function signed(value, suffix = '') {
-  if (value === null || value === undefined || Number.isNaN(value)) return '자료 없음';
-  const sign = Number(value) > 0 ? '+' : '';
-  return `${sign}${decimal.format(value)}${suffix}`;
-}
-
 export function StatsPanel({ summary, validation, mode }) {
   const rows = mode === 'compare' ? summary : summary.filter((row) => row.area_key === mode);
-  const boundaryComparisons = rows.filter((row) => row.boundary_comparison);
   return (
     <>
       <section className="stats-grid">
@@ -70,50 +63,6 @@ export function StatsPanel({ summary, validation, mode }) {
           </article>
         ))}
       </section>
-
-      {boundaryComparisons.length > 0 && (
-        <section className="table-panel">
-          <h2>기존 경계 대비 변화</h2>
-          <p className="table-note">본 시스템은 계획상 용지 기준이 아니라 실제 업무기능이 형성된 지역을 기준으로 업무지구를 정의하였다.</p>
-          <div className="table-scroll">
-            <table className="comparison-table">
-              <thead>
-                <tr>
-                  <th>지표</th>
-                  <th>기존 경계</th>
-                  <th>신규 경계</th>
-                  <th>변화량</th>
-                  <th>변화율</th>
-                </tr>
-              </thead>
-              <tbody>
-                {boundaryComparisons.flatMap((row) => {
-                  const comparison = row.boundary_comparison;
-                  const prev = comparison.previous || {};
-                  const current = comparison.current || {};
-                  const change = comparison.change || {};
-                  return [
-                    ['경계 기준', prev.boundary_basis, current.boundary_basis, '-', '-'],
-                    ['면적(km²)', decimal.format((prev.area_m2 || 0) / 1_000_000), decimal.format((current.area_m2 || 0) / 1_000_000), signed((change.area_m2?.absolute || 0) / 1_000_000, ' km²'), signed((change.area_m2?.ratio || 0) * 100, '%')],
-                    ['사업체수(개)', format.format(prev.businesses || 0), format.format(current.businesses || 0), signed(change.businesses?.absolute || 0, '개'), signed((change.businesses?.ratio || 0) * 100, '%')],
-                    ['종사자수(명)', format.format(prev.workers || 0), format.format(current.workers || 0), signed(change.workers?.absolute || 0, '명'), signed((change.workers?.ratio || 0) * 100, '%')],
-                    ['직주비', decimal.format(prev.job_housing_ratio || 0), decimal.format(current.job_housing_ratio || 0), signed(change.job_housing_ratio?.absolute || 0), signed((change.job_housing_ratio?.ratio || 0) * 100, '%')],
-                    ['LUM', decimal.format(prev.landuse_mix_index || 0), decimal.format(current.landuse_mix_index || 0), signed(change.landuse_mix_index?.absolute || 0), signed((change.landuse_mix_index?.ratio || 0) * 100, '%')],
-                  ].map(([label, before, after, delta, ratio]) => (
-                    <tr key={`${row.area_key}-${label}`}>
-                      <th>{label}</th>
-                      <td>{before}</td>
-                      <td>{after}</td>
-                      <td>{delta}</td>
-                      <td>{ratio}</td>
-                    </tr>
-                  ));
-                })}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
 
       <section className="table-panel">
         <h2>비교 통계표</h2>
