@@ -1,92 +1,371 @@
 [
   {
     "area_key": "pangyo",
-    "label": "판교 1테크노밸리",
+    "label": "제1판교테크노밸리",
     "analysis_date": "2023-12-31",
-    "active_station_count_20km": 288,
-    "station_count_2km": 2,
+    "origin_station_id": "26",
+    "origin_station_name": "판교",
     "nearest_station_m": 1070.8,
-    "isochrone_30_area_km2": 113.1,
-    "isochrone_60_area_km2": 452.39,
+    "station_count_2km": 2,
     "commuter_catchment_minutes": 60,
     "cumulative_accessibility": [
       {
         "minutes": 15,
-        "radius_km": 3.0,
-        "allocated_population": 338019.8,
-        "allocated_households": 66669.9,
-        "allocated_workers": 231103.1,
-        "allocated_businesses": 23794.0,
+        "reachable_station_count": 6,
+        "allocated_population": 216691.4,
+        "allocated_households": 48815.6,
+        "allocated_workers": 122601.5,
+        "allocated_businesses": 14994.8,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 382,
-            "overlap_area_m2": 17138293.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 253,
+                "overlap_area_m2": 6719326.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 253,
+                "overlap_area_m2": 6719326.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 382,
-            "overlap_area_m2": 17138293.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 253,
+                "overlap_area_m2": 6719326.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 253,
+                "overlap_area_m2": 6719326.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       },
       {
         "minutes": 30,
-        "radius_km": 6.0,
-        "allocated_population": 821811.4,
-        "allocated_households": 165334.7,
-        "allocated_workers": 324428.8,
-        "allocated_businesses": 42715.0,
+        "reachable_station_count": 43,
+        "allocated_population": 447669.6,
+        "allocated_households": 95569.2,
+        "allocated_workers": 232190.7,
+        "allocated_businesses": 31919.3,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 852,
-            "overlap_area_m2": 60115030.5
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14514932.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14514932.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 852,
-            "overlap_area_m2": 60115030.5
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14514932.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14514932.5
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       },
       {
         "minutes": 45,
-        "radius_km": 9.0,
-        "allocated_population": 902442.0,
-        "allocated_households": 182682.8,
-        "allocated_workers": 354723.0,
-        "allocated_businesses": 47094.0,
+        "reachable_station_count": 160,
+        "allocated_population": 448343.8,
+        "allocated_households": 95690.2,
+        "allocated_workers": 232250.6,
+        "allocated_businesses": 31935.1,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 926,
-            "overlap_area_m2": 69821471.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 926,
-            "overlap_area_m2": 69821471.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       },
       {
         "minutes": 60,
-        "radius_km": 12.0,
-        "allocated_population": 902442.0,
-        "allocated_households": 182682.8,
-        "allocated_workers": 354723.0,
-        "allocated_businesses": 47094.0,
+        "reachable_station_count": 386,
+        "allocated_population": 448343.8,
+        "allocated_households": 95690.2,
+        "allocated_workers": 232250.6,
+        "allocated_businesses": 31935.1,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 926,
-            "overlap_area_m2": 69821471.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 926,
-            "overlap_area_m2": 69821471.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 514,
+                "overlap_area_m2": 14573115.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       }
@@ -97,96 +376,375 @@
       "신안산선",
       "위례신사선"
     ],
-    "method": "same-time buffer with aggregation-area-weighted allocation"
+    "method": "2023 rail network dijkstra; reachable station 800m catchment; SGIS aggregation area-weighted allocation"
   },
   {
     "area_key": "cheongna",
-    "label": "청라국제도시",
+    "label": "청라국제업무지구",
     "analysis_date": "2023-12-31",
-    "active_station_count_20km": 168,
+    "origin_station_id": "313",
+    "origin_station_name": "청라국제도시",
+    "nearest_station_m": 2726.4,
     "station_count_2km": 0,
-    "nearest_station_m": 2870.7,
-    "isochrone_30_area_km2": 113.1,
-    "isochrone_60_area_km2": 452.39,
     "commuter_catchment_minutes": 60,
     "cumulative_accessibility": [
       {
         "minutes": 15,
-        "radius_km": 3.0,
-        "allocated_population": 294813.2,
-        "allocated_households": 56025.4,
-        "allocated_workers": 49738.9,
-        "allocated_businesses": 13159.6,
+        "reachable_station_count": 7,
+        "allocated_population": 53267.7,
+        "allocated_households": 11512.4,
+        "allocated_workers": 7330.5,
+        "allocated_businesses": 2152.2,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 322,
-            "overlap_area_m2": 28179454.3
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 68,
+                "overlap_area_m2": 5584002.4
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 68,
+                "overlap_area_m2": 5584002.4
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 322,
-            "overlap_area_m2": 28179454.3
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 68,
+                "overlap_area_m2": 5584002.4
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 68,
+                "overlap_area_m2": 5584002.4
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       },
       {
         "minutes": 30,
-        "radius_km": 6.0,
-        "allocated_population": 759351.0,
-        "allocated_households": 154547.7,
-        "allocated_workers": 152069.9,
-        "allocated_businesses": 37786.3,
+        "reachable_station_count": 47,
+        "allocated_population": 585864.2,
+        "allocated_households": 120934.1,
+        "allocated_workers": 75622.9,
+        "allocated_businesses": 23296.7,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 768,
-            "overlap_area_m2": 80100907.4
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 641,
+                "overlap_area_m2": 25881999.1
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 641,
+                "overlap_area_m2": 25881999.1
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 768,
-            "overlap_area_m2": 80100907.4
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 641,
+                "overlap_area_m2": 25881999.1
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 641,
+                "overlap_area_m2": 25881999.1
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       },
       {
         "minutes": 45,
-        "radius_km": 9.0,
-        "allocated_population": 1107205.2,
-        "allocated_households": 221557.2,
-        "allocated_workers": 219010.0,
-        "allocated_businesses": 53622.7,
+        "reachable_station_count": 127,
+        "allocated_population": 604929.6,
+        "allocated_households": 125031.9,
+        "allocated_workers": 87644.3,
+        "allocated_businesses": 24963.3,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 1148,
-            "overlap_area_m2": 116567672.3
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 660,
+                "overlap_area_m2": 27776159.8
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 660,
+                "overlap_area_m2": 27776159.8
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 1148,
-            "overlap_area_m2": 116567672.3
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 660,
+                "overlap_area_m2": 27776159.8
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 660,
+                "overlap_area_m2": 27776159.8
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       },
       {
         "minutes": 60,
-        "radius_km": 12.0,
-        "allocated_population": 1243696.0,
-        "allocated_households": 248217.5,
-        "allocated_workers": 229752.0,
-        "allocated_businesses": 57576.0,
+        "reachable_station_count": 296,
+        "allocated_population": 604946.4,
+        "allocated_households": 125035.4,
+        "allocated_workers": 87674.1,
+        "allocated_businesses": 24970.3,
         "allocation_meta": {
           "population": {
-            "method": "aggregation_area_weighted",
-            "features": 1281,
-            "overlap_area_m2": 132670260.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 661,
+                "overlap_area_m2": 27806550.5
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "households": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 661,
+                "overlap_area_m2": 27806550.5
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           },
           "workers": {
-            "method": "aggregation_area_weighted",
-            "features": 1281,
-            "overlap_area_m2": 132670260.2
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 661,
+                "overlap_area_m2": 27806550.5
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
+          },
+          "businesses": {
+            "method": "aggregation_area_weighted_multi_region",
+            "regions": {
+              "23080": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "23080",
+                "features": 661,
+                "overlap_area_m2": 27806550.5
+              },
+              "31023": {
+                "method": "aggregation_area_weighted",
+                "sgis_code": "31023",
+                "features": 0,
+                "overlap_area_m2": 0.0
+              }
+            },
+            "missing_value_regions": [
+              "11"
+            ]
           }
         }
       }
@@ -197,6 +755,6 @@
       "신안산선",
       "위례신사선"
     ],
-    "method": "same-time buffer with aggregation-area-weighted allocation"
+    "method": "2023 rail network dijkstra; reachable station 800m catchment; SGIS aggregation area-weighted allocation"
   }
 ]

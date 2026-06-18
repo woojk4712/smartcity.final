@@ -1,7 +1,7 @@
 [
   {
     "area_key": "pangyo",
-    "label": "판교 1테크노밸리",
+    "label": "제1판교테크노밸리",
     "source": "computed_boundary_geometry_plus_sample_missing_indicators",
     "area_km2": 1.056,
     "perimeter_km": 7.105,
@@ -12,11 +12,11 @@
   },
   {
     "area_key": "cheongna",
-    "label": "청라국제도시",
+    "label": "청라국제업무지구",
     "source": "computed_boundary_geometry_plus_sample_missing_indicators",
-    "area_km2": 6.92,
-    "perimeter_km": 21.356,
-    "compactness": 0.191,
+    "area_km2": 1.055,
+    "perimeter_km": 8.668,
+    "compactness": 0.176,
     "road_density_km_per_km2": null,
     "official_company_count": null,
     "note": "도로망, 공식 입주기업, 매출 지표 원자료가 추가되면 실제값으로 대체"

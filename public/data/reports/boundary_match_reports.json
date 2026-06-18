@@ -1,22 +1,37 @@
 [
   {
     "area_key": "pangyo",
-    "label": "판교 1테크노밸리",
+    "label": "제1판교테크노밸리",
+    "boundary_source": "성남판교 도시지원시설용지 기준: 업로드 소재지 PNU와 연속지적도 병합",
     "input_lot_count": 152,
+    "matched_before_filter_count": 152,
     "matched_parcel_count": 152,
     "matched_unique_pnu_count": 152,
-    "match_rate": 1.0,
+    "match_rate_before_filter": 1.0,
+    "analysis_area_m2": 1055633.9,
     "duplicate_pnus": [],
-    "missing": []
+    "missing": [],
+    "filter_report": null
   },
   {
     "area_key": "cheongna",
-    "label": "청라국제도시",
+    "label": "청라국제업무지구",
+    "boundary_source": "청라국제업무지구 기준: 업로드 청라 PNU 중 토지이용계획 상업/준주거 필지와 청라동 93~107 지번대 필터",
     "input_lot_count": 2176,
-    "matched_parcel_count": 2176,
-    "matched_unique_pnu_count": 2176,
-    "match_rate": 1.0,
+    "matched_before_filter_count": 2176,
+    "matched_parcel_count": 56,
+    "matched_unique_pnu_count": 56,
+    "match_rate_before_filter": 1.0,
+    "analysis_area_m2": 1054672.4,
     "duplicate_pnus": [],
-    "missing": []
+    "missing": [],
+    "filter_report": {
+      "filter_rule": "청라동 93~107 지번대 + 토지이용계획 상업지역/준주거지역",
+      "source_note": "별도 공식 SHP 부재로 업로드 PNU, 연속지적도, 토지이용계획을 조합해 국제업무지구 경계를 재구성",
+      "candidate_before_count": 2176,
+      "selected_count": 56,
+      "candidate_area_m2": 6920060.8,
+      "selected_area_m2": 1054673.5
+    }
   }
 ]

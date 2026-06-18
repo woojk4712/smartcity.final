@@ -1,0 +1,80 @@
+[
+  {
+    "area_key": "pangyo",
+    "origin_station_id": "26",
+    "origin_station_name": "판교",
+    "origin_line": "경강선",
+    "origin_distance_m": 1070.8,
+    "active_node_count": 814,
+    "active_link_count": 992,
+    "reachable_30_count": 43,
+    "reachable_60_count": 386,
+    "aggregation_boundary_regions": [
+      "11",
+      "23080",
+      "31023"
+    ],
+    "missing_sgis_value_regions": {
+      "11": {
+        "population": true,
+        "households": true,
+        "workers": true,
+        "businesses_total": true,
+        "businesses": true
+      },
+      "23080": {
+        "population": false,
+        "households": false,
+        "workers": false,
+        "businesses_total": false,
+        "businesses": false
+      },
+      "31023": {
+        "population": false,
+        "households": false,
+        "workers": false,
+        "businesses_total": false,
+        "businesses": false
+      }
+    }
+  },
+  {
+    "area_key": "cheongna",
+    "origin_station_id": "313",
+    "origin_station_name": "청라국제도시",
+    "origin_line": "공항철도",
+    "origin_distance_m": 2726.4,
+    "active_node_count": 814,
+    "active_link_count": 992,
+    "reachable_30_count": 47,
+    "reachable_60_count": 296,
+    "aggregation_boundary_regions": [
+      "11",
+      "23080",
+      "31023"
+    ],
+    "missing_sgis_value_regions": {
+      "11": {
+        "population": true,
+        "households": true,
+        "workers": true,
+        "businesses_total": true,
+        "businesses": true
+      },
+      "23080": {
+        "population": false,
+        "households": false,
+        "workers": false,
+        "businesses_total": false,
+        "businesses": false
+      },
+      "31023": {
+        "population": false,
+        "households": false,
+        "workers": false,
+        "businesses_total": false,
+        "businesses": false
+      }
+    }
+  }
+]

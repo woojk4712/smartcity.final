@@ -1,10 +1,14 @@
 {
   "area_key": "pangyo",
-  "label": "판교 1테크노밸리",
+  "label": "제1판교테크노밸리",
+  "boundary_source": "성남판교 도시지원시설용지 기준: 업로드 소재지 PNU와 연속지적도 병합",
   "input_lot_count": 152,
+  "matched_before_filter_count": 152,
   "matched_parcel_count": 152,
   "matched_unique_pnu_count": 152,
-  "match_rate": 1.0,
+  "match_rate_before_filter": 1.0,
+  "analysis_area_m2": 1055633.9,
   "duplicate_pnus": [],
-  "missing": []
+  "missing": [],
+  "filter_report": null
 }

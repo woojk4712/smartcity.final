@@ -1,20 +1,22 @@
-import { Building2, MapPinned, TrainFront, UsersRound } from 'lucide-react';
+import { Building2, ClipboardCheck, MapPinned, TrainFront, UsersRound } from 'lucide-react';
 
-const format = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 1 });
+const format = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
+const decimal = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 });
 
 function Metric({ icon: Icon, label, value, suffix = '' }) {
+  const missing = value === null || value === undefined || Number.isNaN(value);
   return (
     <div className="metric">
       <Icon size={18} />
       <div>
         <span>{label}</span>
-        <strong>{value === null || value === undefined ? '자료 없음' : `${format.format(value)}${suffix}`}</strong>
+        <strong>{missing ? '자료 없음' : `${format.format(value)}${suffix}`}</strong>
       </div>
     </div>
   );
 }
 
-export function StatsPanel({ summary, mode }) {
+export function StatsPanel({ summary, validation, mode }) {
   const rows = mode === 'compare' ? summary : summary.filter((row) => row.area_key === mode);
   return (
     <>
@@ -25,12 +27,15 @@ export function StatsPanel({ summary, mode }) {
               <h2>{row.label}</h2>
               <span>{row.analysis_date}</span>
             </header>
+            <p className="source-line">{row.boundary_source}</p>
             <div className="metric-grid">
               <Metric icon={MapPinned} label="구역 면적" value={row.boundary_area_m2 / 1_000_000} suffix=" km²" />
-              <Metric icon={UsersRound} label="구역 인구" value={row.allocated_population} suffix="명" />
-              <Metric icon={Building2} label="구역 사업체" value={row.allocated_businesses} suffix="개" />
-              <Metric icon={TrainFront} label="최근접 역" value={row.nearest_station_m} suffix=" m" />
-              <Metric icon={UsersRound} label="60분 통근권 인구" value={row.commuter_population_60min} suffix="명" />
+              <Metric icon={UsersRound} label="구역 인구" value={row.display_population} suffix="명" />
+              <Metric icon={Building2} label="구역 사업체" value={row.display_businesses} suffix="개" />
+              <Metric icon={UsersRound} label="구역 종사자" value={row.display_workers} suffix="명" />
+              <Metric icon={TrainFront} label="30분 통근권 인구" value={row.commuter_population_30min} suffix="명" />
+              <Metric icon={TrainFront} label="60분 통근권 인구" value={row.commuter_population_60min} suffix="명" />
+              <Metric icon={Building2} label="30분 통근권 종사자" value={row.commuter_workers_30min} suffix="명" />
               <Metric icon={Building2} label="60분 통근권 종사자" value={row.commuter_workers_60min} suffix="명" />
             </div>
           </article>
@@ -50,26 +55,46 @@ export function StatsPanel({ summary, mode }) {
             </thead>
             <tbody>
               {[
-                ['구역 면적(km²)', (r) => r.boundary_area_m2 / 1_000_000],
-                ['구역 총인구(명)', (r) => r.allocated_population],
-                ['구역 가구수(가구)', (r) => r.allocated_households],
-                ['구역 종사자수(명)', (r) => r.allocated_workers],
-                ['구역 사업체수(개)', (r) => r.allocated_businesses],
-                ['60분 통근권 총인구(명)', (r) => r.commuter_population_60min],
-                ['60분 통근권 가구수(가구)', (r) => r.commuter_households_60min],
-                ['60분 통근권 총종사자수(명)', (r) => r.commuter_workers_60min],
-                ['용도혼합도', (r) => r.landuse_mix_index],
-                ['2km 철도역 수', (r) => r.station_count_2km],
+                ['구역 면적(km²)', (r) => decimal.format(r.boundary_area_m2 / 1_000_000)],
+                ['총인구(명)', (r) => format.format(r.display_population)],
+                ['가구수(가구)', (r) => format.format(r.display_households)],
+                ['종사자수(명)', (r) => format.format(r.display_workers)],
+                ['사업체수(개)', (r) => format.format(r.display_businesses)],
+                ['직주비(종사자/인구)', (r) => decimal.format(r.job_housing_ratio ?? 0)],
+                ['LUM', (r) => decimal.format(r.landuse_mix_index ?? 0)],
+                ['평균 용적률(%)', (r) => r.avg_floor_area_ratio ?? '자료 없음'],
+                ['30분 통근권 인구(명)', (r) => format.format(r.commuter_population_30min)],
+                ['60분 통근권 인구(명)', (r) => format.format(r.commuter_population_60min)],
+                ['30분 통근권 종사자(명)', (r) => format.format(r.commuter_workers_30min)],
+                ['60분 통근권 종사자(명)', (r) => format.format(r.commuter_workers_60min)],
               ].map(([label, getter]) => (
                 <tr key={label}>
                   <th>{label}</th>
                   {rows.map((row) => (
-                    <td key={row.area_key}>{format.format(getter(row) ?? 0)}</td>
+                    <td key={row.area_key}>{getter(row)}</td>
                   ))}
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+      </section>
+      <section className="table-panel">
+        <h2><ClipboardCheck size={16} /> 데이터 검증</h2>
+        <div className="validation-grid">
+          {rows.map((row) => {
+            const item = validation?.[row.area_key] || {};
+            return (
+              <div className="validation-card" key={row.area_key}>
+                <strong>{row.label}</strong>
+                <span>필지 {format.format(item.parcel_count || 0)}개</span>
+                <span>건축물 {format.format(item.building_count || 0)}개</span>
+                <span>집계구 {format.format(item.aggregation_count_population || 0)}개</span>
+                <span>인구 {format.format(item.total_population || 0)}명</span>
+                <span>사업체 {format.format(item.total_businesses || 0)}개</span>
+              </div>
+            );
+          })}
         </div>
       </section>
     </>

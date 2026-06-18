@@ -16,14 +16,15 @@ export async function loadJson(path, fallback = null) {
 }
 
 export async function loadAnalytics() {
-  const [summary, landuse, accessibility, industry, bonus] = await Promise.all([
+  const [summary, landuse, accessibility, industry, bonus, validation] = await Promise.all([
     loadJson(dataPath('analytics/summary.json'), []),
     loadJson(dataPath('analytics/landuse_mix.json'), []),
     loadJson(dataPath('analytics/accessibility.json'), []),
     loadJson(dataPath('analytics/industry.json'), []),
     loadJson(dataPath('analytics/bonus_indicators.json'), []),
+    loadJson(dataPath('reports/validation_report.json'), {}),
   ]);
-  return { summary, landuse, accessibility, industry, bonus };
+  return { summary, landuse, accessibility, industry, bonus, validation };
 }
 
 export function dataPath(path) {

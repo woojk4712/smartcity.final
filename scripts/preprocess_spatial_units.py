@@ -5,6 +5,16 @@ import geopandas as gpd
 from common import AREAS, CRS_METRIC, OUT, ensure_dirs, load_boundary, write_json
 
 
+def fix_mojibake(value):
+    if value is None:
+        return value
+    text = str(value)
+    try:
+        return text.encode("latin1").decode("cp949")
+    except (UnicodeEncodeError, UnicodeDecodeError):
+        return text
+
+
 def include_parcel_by_overlap(parcel_geom, boundary_geom, threshold: float = 0.5) -> tuple[bool, float, float]:
     original_area = parcel_geom.area
     overlap_area = parcel_geom.intersection(boundary_geom).area
@@ -31,7 +41,7 @@ def build_building_join(area_key: str) -> dict:
     subset = buildings[buildings.geometry.centroid.within(boundary_geom)].copy()
     subset["overlap_area"] = subset.geometry.area
     subset["overlap_ratio"] = 1.0
-    subset["main_use"] = subset.get("A9")
+    subset["main_use"] = subset.get("A9").map(fix_mojibake) if "A9" in subset else None
     subset["building_area_m2"] = subset.get("A12")
     subset["gross_floor_area_m2"] = subset.get("A14")
     subset["land_area_m2"] = subset.get("A15")

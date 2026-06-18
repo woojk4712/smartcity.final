@@ -294,6 +294,41 @@ input {
   line-height: 1.25;
 }
 
+.source-line {
+  margin: -6px 0 12px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.table-panel h2 {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.validation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.validation-card {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px 10px;
+  padding: 12px;
+  border: 1px solid #e4e8ef;
+  border-radius: 6px;
+  background: #fafbfc;
+  font-size: 13px;
+}
+
+.validation-card strong {
+  grid-column: 1 / -1;
+  font-size: 14px;
+}
+
 .chart-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(260px, 1fr));
@@ -355,6 +390,10 @@ input {
   }
 
   .metric-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .validation-grid {
     grid-template-columns: 1fr;
   }
 }

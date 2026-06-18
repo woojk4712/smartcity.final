@@ -106,8 +106,8 @@ export function MapView({ mode, layers, isochroneMinutes }) {
             }).addTo(group);
           }
         }
-        if (layers.rail) {
-          const rail = await loadJson(dataPath(`transport/${key}_rail_2023.geojson`));
+        if (layers.isochrone) {
+          const rail = await loadJson(dataPath(`transport/${key}_rail_${isochroneMinutes}.geojson`));
           if (alive && rail) {
             L.geoJSON(rail, {
               pointToLayer: (_feature, latlng) => L.marker(latlng, { icon: stationIcon }),

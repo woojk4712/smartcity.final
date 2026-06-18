@@ -14,8 +14,8 @@ const modes = [
 export function App() {
   const [mode, setMode] = useState('compare');
   const [isochroneMinutes, setIsochroneMinutes] = useState(30);
-  const [layers, setLayers] = useState({ boundary: true, parcels: false, buildings: true, rail: true, isochrone: true });
-  const [analytics, setAnalytics] = useState({ summary: [], landuse: [], accessibility: [], industry: [], bonus: [] });
+  const [layers, setLayers] = useState({ boundary: true, parcels: false, buildings: true, isochrone: false });
+  const [analytics, setAnalytics] = useState({ summary: [], landuse: [], accessibility: [], industry: [], bonus: [], validation: {} });
 
   useEffect(() => {
     loadAnalytics().then(setAnalytics);
@@ -57,7 +57,6 @@ export function App() {
             ['boundary', '구역계'],
             ['parcels', '매칭 필지'],
             ['buildings', '건축물'],
-            ['rail', '2023 철도역'],
             ['isochrone', '등시간권'],
           ].map(([key, label]) => (
             <label className="toggle-row" key={key}>
@@ -85,7 +84,7 @@ export function App() {
 
       <section className="workspace">
         <MapView mode={mode} layers={layers} isochroneMinutes={isochroneMinutes} />
-        <StatsPanel summary={analytics.summary} mode={mode} />
+        <StatsPanel summary={analytics.summary} validation={analytics.validation} mode={mode} />
         <Charts
           summary={analytics.summary}
           landuse={analytics.landuse}
