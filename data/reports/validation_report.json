@@ -84,31 +84,31 @@
   },
   "cheongna": {
     "label": "청라국제업무지구",
-    "boundary_source": "인천경제자유구역청 청라국제도시 개발계획 또는 지구단위계획 자료",
-    "boundary_definition": "청라국제도시 내 국제업무용지 또는 국제업무단지로 계획된 구역을 비교 대상 업무지구로 정의한다.",
-    "boundary_basis": "청라국제업무용지/국제업무단지 대응 필지 기준",
-    "boundary_note": "청라동 93~107 지번대와 토지이용계획 상업/준주거 필터는 공식 국제업무용지 경계에 대응되는 필지 범위를 추출하기 위한 보조 조건이다.",
+    "boundary_source": "건축물대장, 연속지적도, 토지이용계획, SGIS 2023 집계자료를 결합한 실제 업무기능 기반 경계",
+    "boundary_definition": "청라국제업무지구는 계획상 국제업무용지뿐 아니라 업무시설·상업시설 연면적, 중심·일반상업지역, 금융업무·하나드림타운 관련 필지, 사업체·종사자 집적을 종합해 실제 업무기능이 형성된 업무·상업 중심지로 정의한다.",
+    "boundary_basis": "실제 업무기능 기반 필지 클러스터",
+    "boundary_note": "순수 공동주택, 학교, 공원, 단독주택 위주 필지와 업무시설이 없는 상업주거지역은 제외하고, 업무시설 또는 상업시설 비중이 높은 필지를 클러스터링하였다.",
     "boundary_area_calculation_method": "구역 면적은 경계 GeoJSON을 EPSG:5179 좌표계로 변환한 뒤 산출하였다.",
-    "boundary_area_m2": 1054672.4,
-    "boundary_area_km2": 1.0547,
-    "building_count": 24,
-    "building_gross_floor_area_m2": 688550.0,
-    "building_land_area_m2": 761988.7,
-    "parcel_count": 56,
-    "aggregation_count_population": 26,
-    "aggregation_count_households": 26,
-    "aggregation_count_businesses": 26,
-    "aggregation_count_workers": 26,
-    "total_population": 8399,
-    "total_households": 2481,
-    "total_businesses": 804,
-    "total_workers": 2387,
-    "landuse_mix_index": 0.382,
-    "zoning_landuse_mix_index": 0.497,
-    "building_landuse_mix_index": 0.382,
+    "boundary_area_m2": 1155646.4,
+    "boundary_area_km2": 1.1556,
+    "building_count": 106,
+    "building_gross_floor_area_m2": 2157650.1,
+    "building_land_area_m2": 978279.6,
+    "parcel_count": 118,
+    "aggregation_count_population": 29,
+    "aggregation_count_households": 29,
+    "aggregation_count_businesses": 29,
+    "aggregation_count_workers": 29,
+    "total_population": 16218,
+    "total_households": 4472,
+    "total_businesses": 1879,
+    "total_workers": 5982,
+    "landuse_mix_index": 0.58,
+    "zoning_landuse_mix_index": 0.499,
+    "building_landuse_mix_index": 0.58,
     "lum_method": "building_main_use_gross_floor_area",
-    "avg_floor_area_ratio": 640.8,
-    "job_housing_ratio": 0.284,
+    "avg_floor_area_ratio": 494.9,
+    "job_housing_ratio": 0.369,
     "reachable_station_30_count": 47,
     "reachable_station_60_count": 296,
     "reachable_station_delta_60_30": 249,
@@ -123,39 +123,155 @@
     "building_main_use_composition": [
       {
         "main_use": "업무시설",
-        "count": 16,
-        "share": 0.6667,
-        "gross_floor_area_m2": 549725.2,
-        "floor_area_share": 0.7984
+        "count": 51,
+        "share": 0.4811,
+        "gross_floor_area_m2": 1313802.5,
+        "floor_area_share": 0.6089
       },
       {
         "main_use": "제1종근린생활시설",
-        "count": 3,
-        "share": 0.125,
-        "gross_floor_area_m2": 33902.9,
-        "floor_area_share": 0.0492
-      },
-      {
-        "main_use": "자동차관련시설",
-        "count": 2,
-        "share": 0.0833,
-        "gross_floor_area_m2": 57448.6,
-        "floor_area_share": 0.0834
+        "count": 21,
+        "share": 0.1981,
+        "gross_floor_area_m2": 237158.2,
+        "floor_area_share": 0.1099
       },
       {
         "main_use": "제2종근린생활시설",
+        "count": 20,
+        "share": 0.1887,
+        "gross_floor_area_m2": 243544.4,
+        "floor_area_share": 0.1129
+      },
+      {
+        "main_use": "자동차관련시설",
+        "count": 8,
+        "share": 0.0755,
+        "gross_floor_area_m2": 203473.8,
+        "floor_area_share": 0.0943
+      },
+      {
+        "main_use": "공동주택",
         "count": 2,
-        "share": 0.0833,
-        "gross_floor_area_m2": 37033.4,
-        "floor_area_share": 0.0538
+        "share": 0.0189,
+        "gross_floor_area_m2": 18660.8,
+        "floor_area_share": 0.0086
+      },
+      {
+        "main_use": "의료시설",
+        "count": 1,
+        "share": 0.0094,
+        "gross_floor_area_m2": 15551.7,
+        "floor_area_share": 0.0072
+      },
+      {
+        "main_use": "판매시설",
+        "count": 1,
+        "share": 0.0094,
+        "gross_floor_area_m2": 55328.1,
+        "floor_area_share": 0.0256
+      },
+      {
+        "main_use": "문화및집회시설",
+        "count": 1,
+        "share": 0.0094,
+        "gross_floor_area_m2": 59690.6,
+        "floor_area_share": 0.0277
       },
       {
         "main_use": "종교시설",
         "count": 1,
-        "share": 0.0417,
+        "share": 0.0094,
         "gross_floor_area_m2": 10439.9,
-        "floor_area_share": 0.0152
+        "floor_area_share": 0.0048
       }
-    ]
+    ],
+    "functional_boundary_metrics": {
+      "filter_rule": "실제 업무기능 기반: 건축물 주용도·연면적, 용도지역, 금융/하나 키워드, 업무상업 중심 지번대 종합",
+      "source_note": "본 시스템은 계획상 용지 기준이 아니라 실제 업무기능이 형성된 지역을 기준으로 업무지구를 정의하였다.",
+      "candidate_before_count": 2176,
+      "selected_count": 118,
+      "candidate_area_m2": 6920060.8,
+      "selected_area_m2": 1155646.4,
+      "included_building_count": 106,
+      "included_office_gfa_m2": 1589553.6,
+      "included_commercial_gfa_m2": 1927807.4,
+      "included_businesses": 1878.8,
+      "included_workers": 5981.8,
+      "score_threshold": 3.0,
+      "selected_reason_counts": {
+        "업무시설 연면적 10,000㎡ 이상, 상업시설 연면적 10,000㎡ 이상, 일반상업지역, 청라국제도시역/금융업무 후보 지번대": 17,
+        "업무시설 연면적 10,000㎡ 이상, 상업시설 연면적 10,000㎡ 이상, 중심상업지역, 청라 업무상업 중심 지번대": 16,
+        "업무시설 연면적 10,000㎡ 이상, 상업시설 연면적 10,000㎡ 이상, 일반상업지역": 15,
+        "중심상업지역, 청라 업무상업 중심 지번대": 14,
+        "상업시설 입지, 일반상업지역, 청라국제도시역/금융업무 후보 지번대": 10,
+        "상업시설 연면적 10,000㎡ 이상, 일반상업지역": 9,
+        "업무시설 입지, 상업시설 입지": 6,
+        "업무시설 연면적 10,000㎡ 이상, 일반상업지역": 4,
+        "상업시설 연면적 10,000㎡ 이상, 중심상업지역, 청라 업무상업 중심 지번대": 4,
+        "상업시설 연면적 10,000㎡ 이상, 일반상업지역, 청라국제도시역/금융업무 후보 지번대": 4,
+        "업무시설 입지, 일반상업지역": 2,
+        "업무시설 입지, 상업시설 입지, 일반상업지역": 2,
+        "상업시설 연면적 10,000㎡ 이상, 준주거지역, 청라국제도시역/금융업무 후보 지번대": 2,
+        "업무시설 입지, 중심상업지역": 2,
+        "상업시설 입지, 일반상업지역, 청라 업무상업 중심 지번대": 1,
+        "업무시설 연면적 10,000㎡ 이상, 중심상업지역, 청라 업무상업 중심 지번대": 1,
+        "업무시설 입지, 상업시설 입지, 청라 업무상업 중심 지번대": 1,
+        "업무시설 입지, 청라국제도시역/금융업무 후보 지번대, 하나·금융업무 키워드": 1,
+        "업무시설 연면적 10,000㎡ 이상, 중심상업지역": 1,
+        "업무시설 연면적 10,000㎡ 이상": 1
+      }
+    },
+    "included_parcel_count": 118,
+    "included_building_count": 106,
+    "included_office_gfa_m2": 1589553.6,
+    "included_businesses": 1878.8,
+    "included_workers": 5981.8,
+    "final_area_m2": 1155646.4,
+    "boundary_comparison": {
+      "previous": {
+        "boundary_basis": "청라국제업무용지/국제업무단지 대응 필지 기준",
+        "area_m2": 1054672.4,
+        "businesses": 804,
+        "workers": 2387,
+        "population": 8399,
+        "job_housing_ratio": 0.284,
+        "landuse_mix_index": 0.382,
+        "parcel_count": 56,
+        "building_count": 24
+      },
+      "current": {
+        "boundary_basis": "실제 업무기능 기반 필지 클러스터",
+        "area_m2": 1155646.4,
+        "businesses": 1879,
+        "workers": 5982,
+        "population": 16218,
+        "job_housing_ratio": 0.369,
+        "landuse_mix_index": 0.58,
+        "parcel_count": 118,
+        "building_count": 106
+      },
+      "change": {
+        "area_m2": {
+          "absolute": 100974.0,
+          "ratio": 0.0957
+        },
+        "businesses": {
+          "absolute": 1075.0,
+          "ratio": 1.3371
+        },
+        "workers": {
+          "absolute": 3595.0,
+          "ratio": 1.5061
+        },
+        "job_housing_ratio": {
+          "absolute": 0.085,
+          "ratio": 0.2993
+        },
+        "landuse_mix_index": {
+          "absolute": 0.198,
+          "ratio": 0.5183
+        }
+      }
+    }
   }
 }
