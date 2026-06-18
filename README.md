@@ -45,4 +45,4 @@ GitHub Pages 대상 저장소는 `https://github.com/woojk4712/smartcity.final.g
 https://woojk4712.github.io/smartcity.final/
 ```
 
-`main` 브랜치에 push하면 `.github/workflows/deploy.yml`이 `npm ci`, `npm run build`를 실행하고 `dist/`를 GitHub Pages에 배포합니다.
+현재 저장소의 GitHub Pages는 `main` 브랜치 루트에서 정적 파일을 직접 서비스하도록 맞췄습니다. 흰 화면을 피하기 위해 빌드된 `index.html`, `assets/`, `data/`도 루트에 포함되어 있습니다.
