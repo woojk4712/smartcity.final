@@ -18,6 +18,11 @@ def by_key(rows):
     return {row["area_key"]: row for row in rows}
 
 
+def read_report(name: str):
+    path = OUT / "reports" / name
+    return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+
+
 def round_display(value) -> int:
     return int(round(float(value or 0)))
 
@@ -85,12 +90,54 @@ def catchment_meta_features(item: dict, key: str) -> int:
     return int(sum((region or {}).get("features", 0) for region in meta.get("regions", {}).values()))
 
 
+def cheongna_previous_boundary_metrics(existing_validation: dict) -> dict | None:
+    old = existing_validation.get("cheongna", {}) if isinstance(existing_validation, dict) else {}
+    if old.get("boundary_comparison", {}).get("previous"):
+        return old["boundary_comparison"]["previous"]
+    if not old or old.get("boundary_basis") == AREAS["cheongna"]["boundary_basis"]:
+        return None
+    return {
+        "boundary_basis": old.get("boundary_basis"),
+        "area_m2": old.get("boundary_area_m2"),
+        "businesses": old.get("total_businesses"),
+        "workers": old.get("total_workers"),
+        "population": old.get("total_population"),
+        "job_housing_ratio": old.get("job_housing_ratio"),
+        "landuse_mix_index": old.get("landuse_mix_index"),
+        "parcel_count": old.get("parcel_count"),
+        "building_count": old.get("building_count"),
+    }
+
+
+def boundary_comparison(previous: dict | None, current: dict) -> dict | None:
+    if not previous:
+        return None
+    fields = ["area_m2", "businesses", "workers", "job_housing_ratio", "landuse_mix_index"]
+    result = {"previous": previous, "current": current, "change": {}}
+    for field in fields:
+        old = previous.get(field)
+        new = current.get(field)
+        if old is None or new is None:
+            result["change"][field] = None
+            continue
+        old_f = float(old)
+        new_f = float(new)
+        result["change"][field] = {
+            "absolute": round(new_f - old_f, 4),
+            "ratio": round((new_f / old_f - 1) if old_f else 0, 4),
+        }
+    return result
+
+
 def main() -> None:
     ensure_dirs()
     access = by_key(read_analytics("accessibility.json"))
     landuse = by_key(read_analytics("landuse_mix.json"))
     industry = by_key(read_analytics("industry.json"))
     bonus = by_key(read_analytics("bonus_indicators.json"))
+    existing_validation = read_report("validation_report.json")
+    boundary_reports = by_key(read_report("boundary_match_reports.json") or [])
+    cheongna_previous = cheongna_previous_boundary_metrics(existing_validation)
     rows = []
     validation = {}
 
@@ -116,9 +163,21 @@ def main() -> None:
         workers_int = round_display(allocated_workers)
         businesses_int = round_display(allocated_businesses)
         job_housing_ratio = round(workers_int / pop_int, 3) if pop_int else None
+        functional_report = (boundary_reports.get(key, {}) or {}).get("filter_report") or {}
+        current_boundary_metrics = {
+            "boundary_basis": cfg["boundary_basis"],
+            "area_m2": round(area_m2, 1),
+            "businesses": businesses_int,
+            "workers": workers_int,
+            "population": pop_int,
+            "job_housing_ratio": job_housing_ratio,
+            "landuse_mix_index": landuse.get(key, {}).get("landuse_mix_index", 0),
+            "parcel_count": int(len(parcels)),
+            "building_count": buildings["count"],
+        }
+        comparison = boundary_comparison(cheongna_previous, current_boundary_metrics) if key == "cheongna" else None
 
-        rows.append(
-            {
+        row_data = {
                 "area_key": key,
                 "label": cfg["label"],
                 "analysis_date": "2023-12-31",
@@ -161,10 +220,14 @@ def main() -> None:
                     "businesses": business_meta,
                 },
                 "allocation_method": "aggregation_area_weighted_internal; display values rounded",
-            }
-        )
+        }
+        if functional_report:
+            row_data["functional_boundary_metrics"] = functional_report
+        if comparison:
+            row_data["boundary_comparison"] = comparison
+        rows.append(row_data)
 
-        validation[key] = {
+        validation_data = {
             "label": cfg["label"],
             "boundary_source": cfg["source"],
             "boundary_definition": cfg["definition"],
@@ -207,6 +270,17 @@ def main() -> None:
             - round_display(catchment_30.get("allocated_workers")),
             "building_main_use_composition": buildings["main_use_composition"],
         }
+        if functional_report:
+            validation_data["functional_boundary_metrics"] = functional_report
+            validation_data["included_parcel_count"] = functional_report.get("selected_count")
+            validation_data["included_building_count"] = functional_report.get("included_building_count")
+            validation_data["included_office_gfa_m2"] = functional_report.get("included_office_gfa_m2")
+            validation_data["included_businesses"] = functional_report.get("included_businesses")
+            validation_data["included_workers"] = functional_report.get("included_workers")
+            validation_data["final_area_m2"] = validation_data["boundary_area_m2"]
+        if comparison:
+            validation_data["boundary_comparison"] = comparison
+        validation[key] = validation_data
 
     write_json(OUT / "analytics" / "summary.json", rows)
     write_json(OUT / "reports" / "validation_report.json", validation)

@@ -295,6 +295,13 @@ input {
   overflow-x: auto;
 }
 
+.table-note {
+  margin: -4px 0 12px;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 .comparison-table {
   width: 100%;
   border-collapse: collapse;
