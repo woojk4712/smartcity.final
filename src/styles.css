@@ -301,6 +301,41 @@ input {
   line-height: 1.45;
 }
 
+.definition-list {
+  margin: 0 0 14px;
+  display: grid;
+  gap: 7px;
+  font-size: 12px;
+}
+
+.definition-list div {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: 8px;
+}
+
+.definition-list dt {
+  color: #465568;
+  font-weight: 700;
+}
+
+.definition-list dd {
+  margin: 0;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.boundary-table {
+  min-width: 1040px;
+}
+
+.boundary-table th,
+.boundary-table td {
+  text-align: left;
+  vertical-align: top;
+  line-height: 1.45;
+}
+
 .table-panel h2 {
   display: flex;
   align-items: center;

@@ -1,7 +1,7 @@
 {
   "area_key": "pangyo",
   "label": "제1판교테크노밸리",
-  "boundary_source": "성남판교 도시지원시설용지 기준: 업로드 소재지 PNU와 연속지적도 병합",
+  "boundary_source": "성남시 지구단위계획 자료 또는 성남판교 도시지원시설용지 고시 자료",
   "input_lot_count": 152,
   "matched_before_filter_count": 152,
   "matched_parcel_count": 152,

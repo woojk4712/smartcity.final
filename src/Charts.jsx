@@ -16,30 +16,30 @@ import {
 
 const colors = ['#2563eb', '#0f766e', '#f97316', '#7c3aed', '#dc2626', '#64748b'];
 
-function shortName(label) {
+function shortName(label = '') {
   return label.replace('제1', '').replace('테크노밸리', 'TV').replace('국제업무지구', '업무지구');
 }
 
-export function Charts({ summary, landuse, accessibility, industry }) {
-  const indexRows = summary.map((row) => ({
+function metricRows(summary, key, fallback = 0) {
+  return summary.map((row) => ({
     name: shortName(row.label),
-    LUM: row.landuse_mix_index ?? 0,
-    '직주비': row.job_housing_ratio ?? 0,
-    '평균 용적률': row.avg_floor_area_ratio ?? 0,
+    value: row[key] ?? fallback,
   }));
+}
 
+export function Charts({ summary, landuse, accessibility, industry }) {
   const scaleRows = summary.map((row) => ({
     name: shortName(row.label),
-    '사업체수': row.display_businesses ?? 0,
-    '종사자수': row.display_workers ?? 0,
+    사업체수: row.display_businesses ?? 0,
+    종사자수: row.display_workers ?? 0,
   }));
 
   const curveRows = [15, 30, 45, 60].map((minutes) => {
     const row = { minutes };
     accessibility.forEach((area) => {
       const item = area.cumulative_accessibility?.find((d) => d.minutes === minutes);
-      row[`${area.label} 인구`] = Math.round(item?.allocated_population ?? 0);
-      row[`${area.label} 종사자`] = Math.round(item?.allocated_workers ?? 0);
+      row[`${shortName(area.label)} 인구`] = Math.round(item?.allocated_population ?? 0);
+      row[`${shortName(area.label)} 종사자`] = Math.round(item?.allocated_workers ?? 0);
     });
     return row;
   });
@@ -52,32 +52,32 @@ export function Charts({ summary, landuse, accessibility, industry }) {
     '60분 종사자': row.commuter_workers_60min ?? 0,
   }));
 
-  const industryRows = industry.flatMap((area) =>
-    (area.industry_composition || [])
-      .slice()
-      .sort((a, b) => (b.workers || 0) - (a.workers || 0))
-      .slice(0, 5)
-      .map((item) => ({
-        area: shortName(area.label),
-        industry: item.industry,
-        workers: Math.round(item.workers || 0),
-      })),
-  );
+  const industryNames = Array.from(
+    new Set(
+      industry.flatMap((area) =>
+        (area.industry_composition || [])
+          .slice()
+          .sort((a, b) => (b.workers || 0) - (a.workers || 0))
+          .slice(0, 5)
+          .map((item) => item.industry),
+      ),
+    ),
+  ).slice(0, 8);
+
+  const industryRows = industryNames.map((name) => {
+    const row = { industry: name };
+    industry.forEach((area) => {
+      const item = (area.industry_composition || []).find((entry) => entry.industry === name);
+      row[shortName(area.label)] = Math.round(item?.workers || 0);
+    });
+    return row;
+  });
 
   return (
     <section className="chart-grid">
-      <Chart title="LUM · 직주비 · 용적률">
-        <BarChart data={indexRows}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="LUM" fill="#2563eb" radius={[3, 3, 0, 0]} />
-          <Bar dataKey="직주비" fill="#0f766e" radius={[3, 3, 0, 0]} />
-          <Bar dataKey="평균 용적률" fill="#f97316" radius={[3, 3, 0, 0]} />
-        </BarChart>
-      </Chart>
+      <MetricChart title="LUM" data={metricRows(summary, 'landuse_mix_index')} unit="" color="#2563eb" />
+      <MetricChart title="직주비" data={metricRows(summary, 'job_housing_ratio')} unit="" color="#0f766e" />
+      <MetricChart title="평균 용적률" data={metricRows(summary, 'avg_floor_area_ratio', 0)} unit="%" color="#f97316" />
 
       <Chart title="사업체 · 종사자 규모">
         <BarChart data={scaleRows}>
@@ -113,8 +113,8 @@ export function Charts({ summary, landuse, accessibility, industry }) {
           <Tooltip />
           <Legend />
           {accessibility.flatMap((area, index) => [
-            <Line key={`${area.area_key}-pop`} type="monotone" dataKey={`${area.label} 인구`} stroke={colors[index]} strokeWidth={2} dot={false} />,
-            <Line key={`${area.area_key}-work`} type="monotone" dataKey={`${area.label} 종사자`} stroke={colors[index + 2]} strokeWidth={2} strokeDasharray="5 4" dot={false} />,
+            <Line key={`${area.area_key}-pop`} type="monotone" dataKey={`${shortName(area.label)} 인구`} stroke={colors[index]} strokeWidth={2} dot={false} />,
+            <Line key={`${area.area_key}-work`} type="monotone" dataKey={`${shortName(area.label)} 종사자`} stroke={colors[index + 2]} strokeWidth={2} strokeDasharray="5 4" dot={false} />,
           ])}
         </LineChart>
       </Chart>
@@ -127,11 +127,27 @@ export function Charts({ summary, landuse, accessibility, industry }) {
                 <Cell key={entry.class} fill={colors[(idx + index) % colors.length]} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => `${(value * 100).toFixed(1)}%`} />
+            <Tooltip formatter={(value) => `${(Number(value) * 100).toFixed(1)}%`} />
             <Legend />
           </PieChart>
         </Chart>
       ))}
+
+      {landuse
+        .filter((row) => row.building_use_classes?.length)
+        .map((row, index) => (
+          <Chart title={`${row.label} 건축물 주용도 구성비`} key={`${row.area_key}-building`}>
+            <PieChart>
+              <Pie data={row.building_use_classes} dataKey="share" nameKey="class" innerRadius={42} outerRadius={78} paddingAngle={1}>
+                {row.building_use_classes.map((entry, idx) => (
+                  <Cell key={entry.class} fill={colors[(idx + index + 2) % colors.length]} />
+                ))}
+              </Pie>
+              <Tooltip formatter={(value) => `${(Number(value) * 100).toFixed(1)}%`} />
+              <Legend />
+            </PieChart>
+          </Chart>
+        ))}
 
       <Chart title="주요 업종 종사자 구성">
         <BarChart data={industryRows}>
@@ -141,11 +157,25 @@ export function Charts({ summary, landuse, accessibility, industry }) {
           <Tooltip />
           <Legend />
           {summary.map((row, idx) => (
-            <Bar key={row.area_key} dataKey="workers" name={shortName(row.label)} fill={colors[idx]} radius={[3, 3, 0, 0]} />
+            <Bar key={row.area_key} dataKey={shortName(row.label)} fill={colors[idx]} radius={[3, 3, 0, 0]} />
           ))}
         </BarChart>
       </Chart>
     </section>
+  );
+}
+
+function MetricChart({ title, data, unit, color }) {
+  return (
+    <Chart title={title}>
+      <BarChart data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip formatter={(value) => `${value}${unit}`} />
+        <Bar dataKey="value" name={title} fill={color} radius={[3, 3, 0, 0]} />
+      </BarChart>
+    </Chart>
   );
 }
 

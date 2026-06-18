@@ -24,6 +24,9 @@ const PROPERTY_LABELS = {
   land_area_m2: '대지면적(m²)',
   building_coverage_ratio: '건폐율(%)',
   floor_area_ratio: '용적률(%)',
+  approval_date: '사용승인일',
+  building_name: '건물명',
+  road_address: '도로명주소',
   overlap_area: '중첩면적(m²)',
   overlap_ratio: '중첩률',
 };

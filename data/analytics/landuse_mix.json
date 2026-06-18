@@ -2,7 +2,7 @@
   {
     "area_key": "pangyo",
     "label": "제1판교테크노밸리",
-    "source": "landuse_plan_pnu_join_area_weighted",
+    "source": "landuse_plan_pnu_join_area_weighted; building_register_pnu_or_lot_join",
     "classes": [
       {
         "class": "업무",
@@ -138,12 +138,47 @@
       }
     ],
     "unmatched_area_m2": 0.0,
-    "landuse_mix_index": 0.323
+    "zoning_landuse_mix_index": 0.323,
+    "building_landuse_mix_index": 0.467,
+    "building_use_classes": [
+      {
+        "class": "업무",
+        "share": 0.5691,
+        "gross_floor_area_m2": 1293088.2
+      },
+      {
+        "class": "상업",
+        "share": 0.0,
+        "gross_floor_area_m2": 0.0
+      },
+      {
+        "class": "주거",
+        "share": 0.0008,
+        "gross_floor_area_m2": 1874.4
+      },
+      {
+        "class": "교육연구",
+        "share": 0.3838,
+        "gross_floor_area_m2": 872013.1
+      },
+      {
+        "class": "공공",
+        "share": 0.0,
+        "gross_floor_area_m2": 0.0
+      },
+      {
+        "class": "기타",
+        "share": 0.0463,
+        "gross_floor_area_m2": 105150.8
+      }
+    ],
+    "landuse_mix_index": 0.467,
+    "lum_method": "building_main_use_gross_floor_area"
   },
   {
     "area_key": "cheongna",
     "label": "청라국제업무지구",
-    "source": "landuse_plan_pnu_join_area_weighted",
+    "source": "landuse_plan_pnu_join_area_weighted; building_register_pnu_or_lot_join",
     "classes": [
       {
         "class": "업무",
@@ -279,6 +314,41 @@
       }
     ],
     "unmatched_area_m2": 0.0,
-    "landuse_mix_index": 0.497
+    "zoning_landuse_mix_index": 0.497,
+    "building_landuse_mix_index": 0.382,
+    "building_use_classes": [
+      {
+        "class": "업무",
+        "share": 0.7984,
+        "gross_floor_area_m2": 549725.2
+      },
+      {
+        "class": "상업",
+        "share": 0.103,
+        "gross_floor_area_m2": 70936.3
+      },
+      {
+        "class": "주거",
+        "share": 0.0,
+        "gross_floor_area_m2": 0.0
+      },
+      {
+        "class": "교육연구",
+        "share": 0.0,
+        "gross_floor_area_m2": 0.0
+      },
+      {
+        "class": "공공",
+        "share": 0.0152,
+        "gross_floor_area_m2": 10439.9
+      },
+      {
+        "class": "기타",
+        "share": 0.0834,
+        "gross_floor_area_m2": 57448.6
+      }
+    ],
+    "landuse_mix_index": 0.382,
+    "lum_method": "building_main_use_gross_floor_area"
   }
 ]

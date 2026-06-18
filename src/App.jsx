@@ -55,7 +55,7 @@ export function App() {
           </div>
           {[
             ['boundary', '구역계'],
-            ['parcels', '매칭 필지'],
+            ['parcels', '분석 필지'],
             ['buildings', '건축물'],
             ['isochrone', '등시간권'],
           ].map(([key, label]) => (
@@ -78,7 +78,7 @@ export function App() {
         </div>
 
         <p className="data-note">
-          SGIS 경계, 도로망, 용도지역 공간자료가 없는 항목은 산출물에 대체 출처가 표시됩니다.
+          두 지역은 모두 전체 신도시가 아니라, 업무기능을 목적으로 계획조성된 업무지구 경계를 기준으로 비교하였다. 이를 통해 주거지 전체와 업무지구를 비교하는 오류를 방지하였다.
         </p>
       </aside>
 

@@ -2,7 +2,7 @@
   {
     "area_key": "pangyo",
     "label": "제1판교테크노밸리",
-    "boundary_source": "성남판교 도시지원시설용지 기준: 업로드 소재지 PNU와 연속지적도 병합",
+    "boundary_source": "성남시 지구단위계획 자료 또는 성남판교 도시지원시설용지 고시 자료",
     "input_lot_count": 152,
     "matched_before_filter_count": 152,
     "matched_parcel_count": 152,
@@ -16,7 +16,7 @@
   {
     "area_key": "cheongna",
     "label": "청라국제업무지구",
-    "boundary_source": "청라국제업무지구 기준: 업로드 청라 PNU 중 토지이용계획 상업/준주거 필지와 청라동 93~107 지번대 필터",
+    "boundary_source": "인천경제자유구역청 청라국제도시 개발계획 또는 지구단위계획 자료",
     "input_lot_count": 2176,
     "matched_before_filter_count": 2176,
     "matched_parcel_count": 56,

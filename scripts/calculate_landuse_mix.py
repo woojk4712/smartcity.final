@@ -7,7 +7,7 @@ from collections import defaultdict
 import geopandas as gpd
 import pandas as pd
 
-from common import AREAS, ROOT, OUT, ensure_dirs, write_json
+from common import AREAS, OUT, ROOT, ensure_dirs, write_json
 
 CLASSES = ["업무", "상업", "주거", "교육연구", "공공", "기타"]
 LANDUSE_SOURCES = {
@@ -38,6 +38,22 @@ def classify_zone(name: str) -> str:
     return "기타"
 
 
+def classify_building_use(name: str) -> str:
+    if not name:
+        return "기타"
+    if "업무" in name or "공장" in name or "지식산업" in name:
+        return "업무"
+    if "판매" in name or "근린생활" in name or "상가" in name or "숙박" in name:
+        return "상업"
+    if "주택" in name or "공동주택" in name or "다가구" in name or "아파트" in name:
+        return "주거"
+    if "교육" in name or "연구" in name or "학교" in name:
+        return "교육연구"
+    if "공공" in name or "문화" in name or "의료" in name or "운동" in name or "종교" in name:
+        return "공공"
+    return "기타"
+
+
 def read_landuse_records(area_key: str, pnu_set: set[str]) -> dict[str, list[str]]:
     source = LANDUSE_SOURCES.get(area_key)
     result: dict[str, list[str]] = defaultdict(list)
@@ -45,6 +61,7 @@ def read_landuse_records(area_key: str, pnu_set: set[str]) -> dict[str, list[str
         return result
 
     usecols = ["고유번호", "용도지역지구명"]
+
     def make_chunks(encoding: str):
         if source.suffix.lower() == ".zip":
             zf = zipfile.ZipFile(source)
@@ -66,50 +83,92 @@ def read_landuse_records(area_key: str, pnu_set: set[str]) -> dict[str, list[str
     return result
 
 
+def building_lum(area_key: str) -> tuple[float | None, list[dict], str]:
+    path = OUT / "buildings" / f"{area_key}_buildings.geojson"
+    if not path.exists():
+        return None, [], "building_data_missing"
+    buildings = gpd.read_file(path)
+    class_area = defaultdict(float)
+    for _, row in buildings.iterrows():
+        try:
+            gross_floor_area = float(row.get("gross_floor_area_m2") or 0)
+        except (TypeError, ValueError):
+            gross_floor_area = 0
+        if math.isnan(gross_floor_area) or gross_floor_area <= 0:
+            continue
+        class_area[classify_building_use(str(row.get("main_use") or ""))] += gross_floor_area
+
+    total = sum(class_area.values())
+    if total <= 0:
+        return None, [], "building_gross_floor_area_missing"
+    shares = {name: class_area.get(name, 0.0) / total for name in CLASSES}
+    classes = [{"class": name, "share": round(shares[name], 4), "gross_floor_area_m2": round(class_area[name], 1)} for name in CLASSES]
+    return round(entropy(shares), 3), classes, "building_main_use_gross_floor_area"
+
+
+def zoning_lum(area_key: str) -> dict:
+    parcels = gpd.read_file(OUT / "parcels" / f"{area_key}_matched_parcels.geojson").to_crs("EPSG:5186")
+    parcels["area_m2"] = parcels.geometry.area
+    pnu_col = "PNU_NORM" if "PNU_NORM" in parcels.columns else "PNU"
+    parcels[pnu_col] = parcels[pnu_col].astype(str)
+
+    records = read_landuse_records(area_key, set(parcels[pnu_col]))
+    class_area = defaultdict(float)
+    detail_area = defaultdict(float)
+    unmatched_area = 0.0
+    for _, parcel in parcels.iterrows():
+        zones = records.get(str(parcel[pnu_col]), [])
+        if not zones:
+            unmatched_area += float(parcel["area_m2"])
+            class_area["기타"] += float(parcel["area_m2"])
+            detail_area["미매칭"] += float(parcel["area_m2"])
+            continue
+        split_area = float(parcel["area_m2"]) / len(zones)
+        for zone in zones:
+            class_area[classify_zone(zone)] += split_area
+            detail_area[zone] += split_area
+
+    area_m2 = float(parcels["area_m2"].sum())
+    shares = {name: class_area.get(name, 0.0) / area_m2 if area_m2 else 0.0 for name in CLASSES}
+    return {
+        "classes": [{"class": k, "share": round(shares[k], 4), "area_m2": round(area_m2 * shares[k], 1)} for k in CLASSES],
+        "zone_details": [
+            {"zone": zone, "area_m2": round(area, 1), "share": round(area / area_m2, 4) if area_m2 else 0}
+            for zone, area in sorted(detail_area.items(), key=lambda item: item[1], reverse=True)[:20]
+        ],
+        "unmatched_area_m2": round(unmatched_area, 1),
+        "zoning_landuse_mix_index": round(entropy(shares), 3),
+    }
+
+
 def main() -> None:
     ensure_dirs()
     rows = []
     for key, cfg in AREAS.items():
-        parcels = gpd.read_file(OUT / "parcels" / f"{key}_matched_parcels.geojson").to_crs("EPSG:5186")
-        parcels["area_m2"] = parcels.geometry.area
-        pnu_col = "PNU_NORM" if "PNU_NORM" in parcels.columns else "PNU"
-        parcels[pnu_col] = parcels[pnu_col].astype(str)
-
-        records = read_landuse_records(key, set(parcels[pnu_col]))
-        class_area = defaultdict(float)
-        detail_area = defaultdict(float)
-        unmatched_area = 0.0
-        for _, parcel in parcels.iterrows():
-            zones = records.get(str(parcel[pnu_col]), [])
-            if not zones:
-                unmatched_area += float(parcel["area_m2"])
-                class_area["기타"] += float(parcel["area_m2"])
-                detail_area["미매칭"] += float(parcel["area_m2"])
-                continue
-            split_area = float(parcel["area_m2"]) / len(zones)
-            for zone in zones:
-                class_area[classify_zone(zone)] += split_area
-                detail_area[zone] += split_area
-
-        area_m2 = float(parcels["area_m2"].sum())
-        shares = {name: class_area.get(name, 0.0) / area_m2 if area_m2 else 0.0 for name in CLASSES}
+        zoning = zoning_lum(key)
+        building_index, building_classes, building_method = building_lum(key)
+        selected_index = building_index if building_index is not None else zoning["zoning_landuse_mix_index"]
         rows.append(
             {
                 "area_key": key,
                 "label": cfg["label"],
-                "source": "landuse_plan_pnu_join_area_weighted",
-                "classes": [{"class": k, "share": round(shares[k], 4), "area_m2": round(area_m2 * shares[k], 1)} for k in CLASSES],
-                "zone_details": [
-                    {"zone": zone, "area_m2": round(area, 1), "share": round(area / area_m2, 4) if area_m2 else 0}
-                    for zone, area in sorted(detail_area.items(), key=lambda item: item[1], reverse=True)[:20]
-                ],
-                "unmatched_area_m2": round(unmatched_area, 1),
-                "landuse_mix_index": round(entropy(shares), 3),
+                "source": "landuse_plan_pnu_join_area_weighted; building_register_pnu_or_lot_join",
+                "classes": zoning["classes"],
+                "zone_details": zoning["zone_details"],
+                "unmatched_area_m2": zoning["unmatched_area_m2"],
+                "zoning_landuse_mix_index": zoning["zoning_landuse_mix_index"],
+                "building_landuse_mix_index": building_index,
+                "building_use_classes": building_classes,
+                "landuse_mix_index": selected_index,
+                "lum_method": building_method if building_index is not None else "zoning_area",
             }
         )
     write_json(OUT / "analytics" / "landuse_mix.json", rows)
     for row in rows:
-        print(f"{row['area_key']}: LUM={row['landuse_mix_index']} unmatched={row['unmatched_area_m2']}")
+        print(
+            f"{row['area_key']}: LUM={row['landuse_mix_index']} "
+            f"method={row['lum_method']} unmatched={row['unmatched_area_m2']}"
+        )
 
 
 if __name__ == "__main__":
