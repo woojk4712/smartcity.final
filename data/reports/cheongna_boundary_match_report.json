@@ -1,0 +1,10 @@
+{
+  "area_key": "cheongna",
+  "label": "청라국제도시",
+  "input_lot_count": 2176,
+  "matched_parcel_count": 2176,
+  "matched_unique_pnu_count": 2176,
+  "match_rate": 1.0,
+  "duplicate_pnus": [],
+  "missing": []
+}

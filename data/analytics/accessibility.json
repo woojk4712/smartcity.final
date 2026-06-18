@@ -1,0 +1,202 @@
+[
+  {
+    "area_key": "pangyo",
+    "label": "판교 1테크노밸리",
+    "analysis_date": "2023-12-31",
+    "active_station_count_20km": 288,
+    "station_count_2km": 2,
+    "nearest_station_m": 1070.8,
+    "isochrone_30_area_km2": 113.1,
+    "isochrone_60_area_km2": 452.39,
+    "commuter_catchment_minutes": 60,
+    "cumulative_accessibility": [
+      {
+        "minutes": 15,
+        "radius_km": 3.0,
+        "allocated_population": 338019.8,
+        "allocated_households": 66669.9,
+        "allocated_workers": 231103.1,
+        "allocated_businesses": 23794.0,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 382,
+            "overlap_area_m2": 17138293.2
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 382,
+            "overlap_area_m2": 17138293.2
+          }
+        }
+      },
+      {
+        "minutes": 30,
+        "radius_km": 6.0,
+        "allocated_population": 821811.4,
+        "allocated_households": 165334.7,
+        "allocated_workers": 324428.8,
+        "allocated_businesses": 42715.0,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 852,
+            "overlap_area_m2": 60115030.5
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 852,
+            "overlap_area_m2": 60115030.5
+          }
+        }
+      },
+      {
+        "minutes": 45,
+        "radius_km": 9.0,
+        "allocated_population": 902442.0,
+        "allocated_households": 182682.8,
+        "allocated_workers": 354723.0,
+        "allocated_businesses": 47094.0,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 926,
+            "overlap_area_m2": 69821471.2
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 926,
+            "overlap_area_m2": 69821471.2
+          }
+        }
+      },
+      {
+        "minutes": 60,
+        "radius_km": 12.0,
+        "allocated_population": 902442.0,
+        "allocated_households": 182682.8,
+        "allocated_workers": 354723.0,
+        "allocated_businesses": 47094.0,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 926,
+            "overlap_area_m2": 69821471.2
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 926,
+            "overlap_area_m2": 69821471.2
+          }
+        }
+      }
+    ],
+    "excluded_future_lines": [
+      "GTX-B",
+      "GTX-C",
+      "신안산선",
+      "위례신사선"
+    ],
+    "method": "same-time buffer with aggregation-area-weighted allocation"
+  },
+  {
+    "area_key": "cheongna",
+    "label": "청라국제도시",
+    "analysis_date": "2023-12-31",
+    "active_station_count_20km": 168,
+    "station_count_2km": 0,
+    "nearest_station_m": 2870.7,
+    "isochrone_30_area_km2": 113.1,
+    "isochrone_60_area_km2": 452.39,
+    "commuter_catchment_minutes": 60,
+    "cumulative_accessibility": [
+      {
+        "minutes": 15,
+        "radius_km": 3.0,
+        "allocated_population": 294813.2,
+        "allocated_households": 56025.4,
+        "allocated_workers": 49738.9,
+        "allocated_businesses": 13159.6,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 322,
+            "overlap_area_m2": 28179454.3
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 322,
+            "overlap_area_m2": 28179454.3
+          }
+        }
+      },
+      {
+        "minutes": 30,
+        "radius_km": 6.0,
+        "allocated_population": 759351.0,
+        "allocated_households": 154547.7,
+        "allocated_workers": 152069.9,
+        "allocated_businesses": 37786.3,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 768,
+            "overlap_area_m2": 80100907.4
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 768,
+            "overlap_area_m2": 80100907.4
+          }
+        }
+      },
+      {
+        "minutes": 45,
+        "radius_km": 9.0,
+        "allocated_population": 1107205.2,
+        "allocated_households": 221557.2,
+        "allocated_workers": 219010.0,
+        "allocated_businesses": 53622.7,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 1148,
+            "overlap_area_m2": 116567672.3
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 1148,
+            "overlap_area_m2": 116567672.3
+          }
+        }
+      },
+      {
+        "minutes": 60,
+        "radius_km": 12.0,
+        "allocated_population": 1243696.0,
+        "allocated_households": 248217.5,
+        "allocated_workers": 229752.0,
+        "allocated_businesses": 57576.0,
+        "allocation_meta": {
+          "population": {
+            "method": "aggregation_area_weighted",
+            "features": 1281,
+            "overlap_area_m2": 132670260.2
+          },
+          "workers": {
+            "method": "aggregation_area_weighted",
+            "features": 1281,
+            "overlap_area_m2": 132670260.2
+          }
+        }
+      }
+    ],
+    "excluded_future_lines": [
+      "GTX-B",
+      "GTX-C",
+      "신안산선",
+      "위례신사선"
+    ],
+    "method": "same-time buffer with aggregation-area-weighted allocation"
+  }
+]

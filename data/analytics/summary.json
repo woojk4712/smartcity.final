@@ -1,0 +1,84 @@
+[
+  {
+    "area_key": "pangyo",
+    "label": "판교 1테크노밸리",
+    "analysis_date": "2023-12-31",
+    "boundary_area_m2": 1055633.9,
+    "allocated_population": 1970.8,
+    "allocated_households": 588.4,
+    "allocated_workers": 58889.3,
+    "allocated_businesses": 1693.7,
+    "commuter_population_60min": 902442.0,
+    "commuter_households_60min": 182682.8,
+    "commuter_workers_60min": 354723.0,
+    "population_density_per_km2": 1867.0,
+    "landuse_mix_index": 0.323,
+    "nearest_station_m": 1070.8,
+    "station_count_2km": 2,
+    "compactness": 0.263,
+    "allocation_meta": {
+      "population": {
+        "method": "aggregation_area_weighted",
+        "features": 13,
+        "overlap_area_m2": 1055633.9
+      },
+      "households": {
+        "method": "aggregation_area_weighted",
+        "features": 13,
+        "overlap_area_m2": 1055633.9
+      },
+      "workers": {
+        "method": "aggregation_area_weighted",
+        "features": 13,
+        "overlap_area_m2": 1055633.9
+      },
+      "businesses": {
+        "method": "aggregation_area_weighted",
+        "features": 13,
+        "overlap_area_m2": 1055633.9
+      }
+    },
+    "allocation_method": "aggregation_area_weighted"
+  },
+  {
+    "area_key": "cheongna",
+    "label": "청라국제도시",
+    "analysis_date": "2023-12-31",
+    "boundary_area_m2": 6919863.2,
+    "allocated_population": 211489.5,
+    "allocated_households": 39660.9,
+    "allocated_workers": 21097.3,
+    "allocated_businesses": 8060.0,
+    "commuter_population_60min": 1243696.0,
+    "commuter_households_60min": 248217.5,
+    "commuter_workers_60min": 229752.0,
+    "population_density_per_km2": 30562.7,
+    "landuse_mix_index": 0.483,
+    "nearest_station_m": 2870.7,
+    "station_count_2km": 0,
+    "compactness": 0.191,
+    "allocation_meta": {
+      "population": {
+        "method": "aggregation_area_weighted",
+        "features": 223,
+        "overlap_area_m2": 6919863.2
+      },
+      "households": {
+        "method": "aggregation_area_weighted",
+        "features": 223,
+        "overlap_area_m2": 6919863.2
+      },
+      "workers": {
+        "method": "aggregation_area_weighted",
+        "features": 223,
+        "overlap_area_m2": 6919863.2
+      },
+      "businesses": {
+        "method": "aggregation_area_weighted",
+        "features": 223,
+        "overlap_area_m2": 6919863.2
+      }
+    },
+    "allocation_method": "aggregation_area_weighted"
+  }
+]
