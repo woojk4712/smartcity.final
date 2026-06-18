@@ -111,7 +111,13 @@ def parcel_lot_key(value) -> str:
 
 
 def building_properties(row: pd.Series, match_method: str) -> dict:
+    ground_floors = parse_float(row.get("지상층수"))
+    underground_floors = parse_float(row.get("지하층수"))
+    floor_text = "자료 없음"
+    if ground_floors is not None or underground_floors is not None:
+        floor_text = f"지상 {int(ground_floors or 0)}층 / 지하 {int(underground_floors or 0)}층"
     return {
+        "feature_type": "building",
         "PNU": normalize_pnu(row.get("PNU")),
         "address": row.get("주소") or "",
         "road_address": row.get("도로명주소") or "",
@@ -130,10 +136,12 @@ def building_properties(row: pd.Series, match_method: str) -> dict:
         "floor_area_ratio": parse_float(row.get("용적률(%)")),
         "households": parse_float(row.get("가구수(가구)")),
         "units": parse_float(row.get("세대수(세대)")),
-        "ground_floors": parse_float(row.get("지상층수")),
-        "underground_floors": parse_float(row.get("지하층수")),
+        "ground_floors": ground_floors,
+        "underground_floors": underground_floors,
+        "floors": floor_text,
         "approval_date": row.get("사용승인일") or "",
         "source": f"building_register_xlsx_{match_method}",
+        "geometry_source": "parcel_polygon_representative; replace with building polygon when available",
     }
 
 
@@ -185,9 +193,11 @@ def build_building_join(area_key: str) -> dict:
         if register_no:
             seen_register_numbers.add(register_no)
         props = building_properties(row, match_method)
+        props["area_key"] = area_key
+        props["area_label"] = AREAS[area_key]["label"]
         props["matched_parcel_pnu"] = parcel[pnu_col]
         props["matched_parcel_lot"] = parcel.get("JIBUN", "")
-        features.append(props | {"geometry": parcel.geometry.centroid})
+        features.append(props | {"geometry": parcel.geometry})
 
     buildings = gpd.GeoDataFrame(features, geometry="geometry", crs=CRS_METRIC)
     buildings.to_crs(CRS_WEB).to_file(OUT / "buildings" / f"{area_key}_buildings.geojson", driver="GeoJSON")

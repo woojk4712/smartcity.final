@@ -14,7 +14,15 @@ const modes = [
 export function App() {
   const [mode, setMode] = useState('compare');
   const [isochroneMinutes, setIsochroneMinutes] = useState(30);
-  const [layers, setLayers] = useState({ boundary: true, parcels: false, buildings: true, isochrone: false });
+  const [layers, setLayers] = useState({
+    boundary: true,
+    buildingUseMap: true,
+    zoningMap: false,
+    parcelBoundary: false,
+    buildingBoundary: true,
+    isochrone: false,
+    stations: false,
+  });
   const [analytics, setAnalytics] = useState({ summary: [], landuse: [], accessibility: [], industry: [], bonus: [], validation: {} });
 
   useEffect(() => {
@@ -55,9 +63,12 @@ export function App() {
           </div>
           {[
             ['boundary', '구역계'],
-            ['parcels', '분석 필지'],
-            ['buildings', '건축물'],
+            ['buildingUseMap', '건축물 주용도 컬러맵'],
+            ['zoningMap', '용도지역 컬러맵'],
+            ['parcelBoundary', '필지 경계'],
+            ['buildingBoundary', '건축물 경계'],
             ['isochrone', '등시간권'],
+            ['stations', '철도역'],
           ].map(([key, label]) => (
             <label className="toggle-row" key={key}>
               <input type="checkbox" checked={layers[key]} onChange={() => toggleLayer(key)} />

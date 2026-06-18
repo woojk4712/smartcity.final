@@ -38,6 +38,21 @@ def classify_zone(name: str) -> str:
     return "기타"
 
 
+def classify_zoning_detail(zones: list[str]) -> str:
+    joined = " ".join(zones)
+    if "중심상업지역" in joined:
+        return "중심상업지역"
+    if "일반상업지역" in joined:
+        return "일반상업지역"
+    if "준주거지역" in joined:
+        return "준주거지역"
+    if "일반주거지역" in joined or "제1종일반주거지역" in joined or "제2종일반주거지역" in joined or "제3종일반주거지역" in joined:
+        return "일반주거지역"
+    if "도시지원시설" in joined or "도시지원시설용지" in joined:
+        return "도시지원시설용지"
+    return "기타"
+
+
 def classify_building_use(name: str) -> str:
     if not name:
         return "기타"
@@ -52,6 +67,10 @@ def classify_building_use(name: str) -> str:
     if "공공" in name or "문화" in name or "의료" in name or "운동" in name or "종교" in name:
         return "공공"
     return "기타"
+
+
+def building_use_category(name: str) -> str:
+    return classify_building_use(name)
 
 
 def read_landuse_records(area_key: str, pnu_set: set[str]) -> dict[str, list[str]]:
@@ -106,6 +125,33 @@ def building_lum(area_key: str) -> tuple[float | None, list[dict], str]:
     return round(entropy(shares), 3), classes, "building_main_use_gross_floor_area"
 
 
+def building_aggregates_by_parcel(area_key: str) -> dict[str, dict]:
+    path = OUT / "buildings" / f"{area_key}_buildings.geojson"
+    if not path.exists():
+        return {}
+    buildings = gpd.read_file(path)
+    result: dict[str, dict] = {}
+    for _, row in buildings.iterrows():
+        pnu = str(row.get("matched_parcel_pnu") or row.get("PNU") or "")
+        if not pnu:
+            continue
+        item = result.setdefault(pnu, {"count": 0, "gross_floor_area": 0.0, "far_values": []})
+        item["count"] += 1
+        try:
+            gfa = float(row.get("gross_floor_area_m2") or 0)
+            if not math.isnan(gfa):
+                item["gross_floor_area"] += gfa
+        except (TypeError, ValueError):
+            pass
+        try:
+            far = float(row.get("floor_area_ratio") or 0)
+            if not math.isnan(far) and far > 0:
+                item["far_values"].append(far)
+        except (TypeError, ValueError):
+            pass
+    return result
+
+
 def zoning_lum(area_key: str) -> dict:
     parcels = gpd.read_file(OUT / "parcels" / f"{area_key}_matched_parcels.geojson").to_crs("EPSG:5186")
     parcels["area_m2"] = parcels.geometry.area
@@ -113,11 +159,25 @@ def zoning_lum(area_key: str) -> dict:
     parcels[pnu_col] = parcels[pnu_col].astype(str)
 
     records = read_landuse_records(area_key, set(parcels[pnu_col]))
+    building_aggregates = building_aggregates_by_parcel(area_key)
     class_area = defaultdict(float)
     detail_area = defaultdict(float)
     unmatched_area = 0.0
+    zoning_primary = []
+    zoning_districts = []
+    zoning_categories = []
+    building_counts = []
+    building_gfa = []
+    parcel_avg_far = []
     for _, parcel in parcels.iterrows():
         zones = records.get(str(parcel[pnu_col]), [])
+        zoning_primary.append(zones[0] if zones else "자료 없음")
+        zoning_districts.append(", ".join(zones) if zones else "자료 없음")
+        zoning_categories.append(classify_zoning_detail(zones))
+        aggregate = building_aggregates.get(str(parcel[pnu_col]), {"count": 0, "gross_floor_area": 0.0, "far_values": []})
+        building_counts.append(int(aggregate["count"]))
+        building_gfa.append(round(float(aggregate["gross_floor_area"]), 1))
+        parcel_avg_far.append(round(sum(aggregate["far_values"]) / len(aggregate["far_values"]), 1) if aggregate["far_values"] else None)
         if not zones:
             unmatched_area += float(parcel["area_m2"])
             class_area["기타"] += float(parcel["area_m2"])
@@ -127,6 +187,18 @@ def zoning_lum(area_key: str) -> dict:
         for zone in zones:
             class_area[classify_zone(zone)] += split_area
             detail_area[zone] += split_area
+
+    parcels["feature_type"] = "parcel"
+    parcels["area_key"] = area_key
+    parcels["area_label"] = AREAS[area_key]["label"]
+    parcels["parcel_area_m2"] = parcels["area_m2"].round(1)
+    parcels["zoning_primary"] = zoning_primary
+    parcels["zoning_districts"] = zoning_districts
+    parcels["zoning_category"] = zoning_categories
+    parcels["building_count"] = building_counts
+    parcels["building_gross_floor_area_m2"] = building_gfa
+    parcels["avg_floor_area_ratio"] = parcel_avg_far
+    parcels.to_crs("EPSG:4326").to_file(OUT / "parcels" / f"{area_key}_matched_parcels.geojson", driver="GeoJSON")
 
     area_m2 = float(parcels["area_m2"].sum())
     shares = {name: class_area.get(name, 0.0) / area_m2 if area_m2 else 0.0 for name in CLASSES}

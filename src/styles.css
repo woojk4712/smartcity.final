@@ -135,9 +135,15 @@ input {
   padding: 16px;
 }
 
+.map-frame {
+  position: relative;
+  min-height: 430px;
+}
+
 #map {
   width: 100%;
   min-height: 430px;
+  height: 100%;
   border: 1px solid #d8dee7;
   border-radius: 8px;
   overflow: hidden;
@@ -182,6 +188,80 @@ input {
 .popup-table th {
   color: #475569;
   white-space: nowrap;
+}
+
+.popup-subtitle {
+  margin: 4px 0 6px;
+  color: #64748b;
+  font-size: 12px;
+}
+
+.map-legend {
+  position: absolute;
+  right: 14px;
+  bottom: 22px;
+  z-index: 450;
+  width: 210px;
+  max-height: min(360px, calc(100% - 48px));
+  overflow: auto;
+  padding: 12px;
+  background: rgb(255 255 255 / 94%);
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  box-shadow: 0 8px 20px rgb(15 23 42 / 16%);
+  font-size: 12px;
+}
+
+.map-legend strong {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.legend-group {
+  display: grid;
+  gap: 5px;
+  margin-bottom: 9px;
+}
+
+.legend-title {
+  color: #475569;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 18px;
+  color: #334155;
+}
+
+.legend-swatch {
+  width: 13px;
+  height: 13px;
+  border: 1px solid rgb(15 23 42 / 22%);
+  border-radius: 3px;
+  flex: 0 0 auto;
+}
+
+.legend-line {
+  display: inline-block;
+  width: 22px;
+  height: 0;
+  border-top: 3px solid #2563eb;
+  flex: 0 0 auto;
+}
+
+.legend-line.iso30 {
+  border-top-color: #f97316;
+  border-top-style: dashed;
+}
+
+.legend-line.iso60 {
+  border-top-color: #7c3aed;
+  border-top-style: dotted;
 }
 
 .stats-grid {
