@@ -1,0 +1,326 @@
+[
+  {
+    "area_key": "pangyo",
+    "label": "판교 1테크노밸리",
+    "source": "sgis_2023_csv_district_total_until_aggregation_polygons_added",
+    "allocated_businesses": 47094.0,
+    "allocated_workers": 354723.0,
+    "knowledge_industry_share": 0.62,
+    "industry_composition": [
+      {
+        "code": "001",
+        "industry": "농림어업",
+        "businesses": 0.0,
+        "workers": 28.0,
+        "business_share": 0.0,
+        "worker_share": 0.0001
+      },
+      {
+        "code": "002",
+        "industry": "광업",
+        "businesses": 0.0,
+        "workers": 0.0,
+        "business_share": 0.0,
+        "worker_share": 0.0
+      },
+      {
+        "code": "003",
+        "industry": "제조업",
+        "businesses": 885.0,
+        "workers": 9984.0,
+        "business_share": 0.0188,
+        "worker_share": 0.0281
+      },
+      {
+        "code": "004",
+        "industry": "전기가스",
+        "businesses": 0.0,
+        "workers": 553.0,
+        "business_share": 0.0,
+        "worker_share": 0.0016
+      },
+      {
+        "code": "005",
+        "industry": "수도폐기물",
+        "businesses": 0.0,
+        "workers": 249.0,
+        "business_share": 0.0,
+        "worker_share": 0.0007
+      },
+      {
+        "code": "006",
+        "industry": "건설업",
+        "businesses": 1098.0,
+        "workers": 19160.0,
+        "business_share": 0.0233,
+        "worker_share": 0.054
+      },
+      {
+        "code": "007",
+        "industry": "도소매업",
+        "businesses": 13888.0,
+        "workers": 48338.0,
+        "business_share": 0.2949,
+        "worker_share": 0.1363
+      },
+      {
+        "code": "008",
+        "industry": "운수창고업",
+        "businesses": 401.0,
+        "workers": 5119.0,
+        "business_share": 0.0085,
+        "worker_share": 0.0144
+      },
+      {
+        "code": "009",
+        "industry": "숙박음식점",
+        "businesses": 5637.0,
+        "workers": 25533.0,
+        "business_share": 0.1197,
+        "worker_share": 0.072
+      },
+      {
+        "code": "010",
+        "industry": "정보통신업",
+        "businesses": 2515.0,
+        "workers": 86625.0,
+        "business_share": 0.0534,
+        "worker_share": 0.2442
+      },
+      {
+        "code": "011",
+        "industry": "금융보험업",
+        "businesses": 580.0,
+        "workers": 12409.0,
+        "business_share": 0.0123,
+        "worker_share": 0.035
+      },
+      {
+        "code": "012",
+        "industry": "부동산업",
+        "businesses": 2659.0,
+        "workers": 11346.0,
+        "business_share": 0.0565,
+        "worker_share": 0.032
+      },
+      {
+        "code": "013",
+        "industry": "전문과학기술",
+        "businesses": 2589.0,
+        "workers": 46567.0,
+        "business_share": 0.055,
+        "worker_share": 0.1313
+      },
+      {
+        "code": "014",
+        "industry": "사업시설지원",
+        "businesses": 618.0,
+        "workers": 22146.0,
+        "business_share": 0.0131,
+        "worker_share": 0.0624
+      },
+      {
+        "code": "015",
+        "industry": "공공행정",
+        "businesses": 5.0,
+        "workers": 4516.0,
+        "business_share": 0.0001,
+        "worker_share": 0.0127
+      },
+      {
+        "code": "016",
+        "industry": "교육서비스",
+        "businesses": 2953.0,
+        "workers": 19231.0,
+        "business_share": 0.0627,
+        "worker_share": 0.0542
+      },
+      {
+        "code": "017",
+        "industry": "보건사회복지",
+        "businesses": 1291.0,
+        "workers": 29223.0,
+        "business_share": 0.0274,
+        "worker_share": 0.0824
+      },
+      {
+        "code": "018",
+        "industry": "예술스포츠",
+        "businesses": 1022.0,
+        "workers": 4499.0,
+        "business_share": 0.0217,
+        "worker_share": 0.0127
+      },
+      {
+        "code": "019",
+        "industry": "기타서비스",
+        "businesses": 3060.0,
+        "workers": 9197.0,
+        "business_share": 0.065,
+        "worker_share": 0.0259
+      }
+    ]
+  },
+  {
+    "area_key": "cheongna",
+    "label": "청라국제도시",
+    "source": "sgis_2023_csv_district_total_until_aggregation_polygons_added",
+    "allocated_businesses": 57576.0,
+    "allocated_workers": 229752.0,
+    "knowledge_industry_share": 0.38,
+    "industry_composition": [
+      {
+        "code": "001",
+        "industry": "농림어업",
+        "businesses": 0.0,
+        "workers": 42.0,
+        "business_share": 0.0,
+        "worker_share": 0.0002
+      },
+      {
+        "code": "002",
+        "industry": "광업",
+        "businesses": 0.0,
+        "workers": 79.0,
+        "business_share": 0.0,
+        "worker_share": 0.0003
+      },
+      {
+        "code": "003",
+        "industry": "제조업",
+        "businesses": 8747.0,
+        "workers": 70034.0,
+        "business_share": 0.1519,
+        "worker_share": 0.3048
+      },
+      {
+        "code": "004",
+        "industry": "전기가스",
+        "businesses": 35.0,
+        "workers": 1660.0,
+        "business_share": 0.0006,
+        "worker_share": 0.0072
+      },
+      {
+        "code": "005",
+        "industry": "수도폐기물",
+        "businesses": 150.0,
+        "workers": 2974.0,
+        "business_share": 0.0026,
+        "worker_share": 0.0129
+      },
+      {
+        "code": "006",
+        "industry": "건설업",
+        "businesses": 3640.0,
+        "workers": 12900.0,
+        "business_share": 0.0632,
+        "worker_share": 0.0561
+      },
+      {
+        "code": "007",
+        "industry": "도소매업",
+        "businesses": 14924.0,
+        "workers": 34600.0,
+        "business_share": 0.2592,
+        "worker_share": 0.1506
+      },
+      {
+        "code": "008",
+        "industry": "운수창고업",
+        "businesses": 645.0,
+        "workers": 11058.0,
+        "business_share": 0.0112,
+        "worker_share": 0.0481
+      },
+      {
+        "code": "009",
+        "industry": "숙박음식점",
+        "businesses": 6387.0,
+        "workers": 18531.0,
+        "business_share": 0.1109,
+        "worker_share": 0.0807
+      },
+      {
+        "code": "010",
+        "industry": "정보통신업",
+        "businesses": 332.0,
+        "workers": 2682.0,
+        "business_share": 0.0058,
+        "worker_share": 0.0117
+      },
+      {
+        "code": "011",
+        "industry": "금융보험업",
+        "businesses": 87.0,
+        "workers": 1773.0,
+        "business_share": 0.0015,
+        "worker_share": 0.0077
+      },
+      {
+        "code": "012",
+        "industry": "부동산업",
+        "businesses": 2181.0,
+        "workers": 5286.0,
+        "business_share": 0.0379,
+        "worker_share": 0.023
+      },
+      {
+        "code": "013",
+        "industry": "전문과학기술",
+        "businesses": 933.0,
+        "workers": 6716.0,
+        "business_share": 0.0162,
+        "worker_share": 0.0292
+      },
+      {
+        "code": "014",
+        "industry": "사업시설지원",
+        "businesses": 578.0,
+        "workers": 5736.0,
+        "business_share": 0.01,
+        "worker_share": 0.025
+      },
+      {
+        "code": "015",
+        "industry": "공공행정",
+        "businesses": 0.0,
+        "workers": 6513.0,
+        "business_share": 0.0,
+        "worker_share": 0.0283
+      },
+      {
+        "code": "016",
+        "industry": "교육서비스",
+        "businesses": 1877.0,
+        "workers": 14389.0,
+        "business_share": 0.0326,
+        "worker_share": 0.0626
+      },
+      {
+        "code": "017",
+        "industry": "보건사회복지",
+        "businesses": 796.0,
+        "workers": 23371.0,
+        "business_share": 0.0138,
+        "worker_share": 0.1017
+      },
+      {
+        "code": "018",
+        "industry": "예술스포츠",
+        "businesses": 992.0,
+        "workers": 3303.0,
+        "business_share": 0.0172,
+        "worker_share": 0.0144
+      },
+      {
+        "code": "019",
+        "industry": "기타서비스",
+        "businesses": 3673.0,
+        "workers": 8105.0,
+        "business_share": 0.0638,
+        "worker_share": 0.0353
+      }
+    ]
+  }
+]

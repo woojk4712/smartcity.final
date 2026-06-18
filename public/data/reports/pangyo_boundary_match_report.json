@@ -1,0 +1,10 @@
+{
+  "area_key": "pangyo",
+  "label": "판교 1테크노밸리",
+  "input_lot_count": 152,
+  "matched_parcel_count": 152,
+  "matched_unique_pnu_count": 152,
+  "match_rate": 1.0,
+  "duplicate_pnus": [],
+  "missing": []
+}
