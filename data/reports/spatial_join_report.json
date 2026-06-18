@@ -1,10 +1,177 @@
 [
   {
     "area_key": "pangyo",
-    "building_count": 1
+    "building_source": "C:\\Users\\SAMSUNG\\OneDrive\\바탕 화면\\smartcity_final\\판교\\판교_건축물대장\\건축물조서.xlsx",
+    "building_count": 64,
+    "matched_by_pnu": 64,
+    "matched_by_lot": 0,
+    "unmatched_register_rows": 0,
+    "unmatched_sample": [],
+    "gross_floor_area_m2": 2272126.6,
+    "avg_floor_area_ratio": 339.5,
+    "method": "building register xlsx matched to analysis parcels by PNU, falling back to lot number"
   },
   {
     "area_key": "cheongna",
-    "building_count": 0
+    "building_source": "C:\\Users\\SAMSUNG\\OneDrive\\바탕 화면\\smartcity_final\\청라\\인천광역시 서구 경서동 일원_건축물대장\\건축물조서.xlsx",
+    "building_count": 24,
+    "matched_by_pnu": 24,
+    "matched_by_lot": 0,
+    "unmatched_register_rows": 1920,
+    "unmatched_sample": [
+      {
+        "PNU": "2826012200101270006",
+        "lot": "127-6 외 1필지",
+        "building_name": "이영주 상가주택"
+      },
+      {
+        "PNU": "2826012200101890014",
+        "lot": "189-14",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101210003",
+        "lot": "121-3",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101210022",
+        "lot": "121-22",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101890003",
+        "lot": "189-3",
+        "building_name": "1"
+      },
+      {
+        "PNU": "2826012200101190010",
+        "lot": "119-10",
+        "building_name": "이삭빌딩"
+      },
+      {
+        "PNU": "2826012200101290004",
+        "lot": "129-4",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 417동"
+      },
+      {
+        "PNU": "2826012200101450013",
+        "lot": "145-13",
+        "building_name": "단독주택 1"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 406동"
+      },
+      {
+        "PNU": "2826012200101050078",
+        "lot": "105-78",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200100200020",
+        "lot": "20-20 외 1필지",
+        "building_name": "청라동 20-20  단독주택 주건축물제1동"
+      },
+      {
+        "PNU": "2826012200100200023",
+        "lot": "20-23",
+        "building_name": "주1"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 418동"
+      },
+      {
+        "PNU": "2826012200101050115",
+        "lot": "105-115",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 412동"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 407동"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 401동"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 414동"
+      },
+      {
+        "PNU": "2826012200101050039",
+        "lot": "105-39",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101800012",
+        "lot": "180-12",
+        "building_name": "경서동 근생및다가구주택"
+      },
+      {
+        "PNU": "2826012200101480009",
+        "lot": "148-9",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101400005",
+        "lot": "140-5",
+        "building_name": "인천 청람중학교"
+      },
+      {
+        "PNU": "2826012200100620026",
+        "lot": "62-26",
+        "building_name": "청라동 단독주택"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 408동"
+      },
+      {
+        "PNU": "2826012200101760003",
+        "lot": "176-3",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101230001",
+        "lot": "123-1",
+        "building_name": ""
+      },
+      {
+        "PNU": "2826012200101120013",
+        "lot": "112-13",
+        "building_name": "1"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 419동"
+      },
+      {
+        "PNU": "2826012200101840001",
+        "lot": "184-1",
+        "building_name": "청라엘에이치 420동"
+      }
+    ],
+    "gross_floor_area_m2": 688550.0,
+    "avg_floor_area_ratio": 640.8,
+    "method": "building register xlsx matched to analysis parcels by PNU, falling back to lot number"
   }
 ]
