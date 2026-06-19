@@ -35,6 +35,16 @@
     "nearest_station_m": 1070.8,
     "station_count_2km": 2,
     "compactness": 0.263,
+    "bus_stop_count": 27,
+    "bus_stop_density_per_km2": 25.58,
+    "road_length_km": null,
+    "road_network_density_km_per_km2": null,
+    "nearest_highway_ic_km": null,
+    "nearest_highway_ic_name": null,
+    "station_area_ratio_500m": 0.49,
+    "station_area_ratio_1km": 35.55,
+    "station_count_500m": 2,
+    "station_count_1km": 2,
     "allocation_meta": {
       "population": {
         "method": "aggregation_area_weighted",
@@ -99,6 +109,16 @@
     "nearest_station_m": 2719.2,
     "station_count_2km": 0,
     "compactness": 0.027,
+    "bus_stop_count": null,
+    "bus_stop_density_per_km2": null,
+    "road_length_km": null,
+    "road_network_density_km_per_km2": null,
+    "nearest_highway_ic_km": null,
+    "nearest_highway_ic_name": null,
+    "station_area_ratio_500m": 0.0,
+    "station_area_ratio_1km": 0.0,
+    "station_count_500m": 0,
+    "station_count_1km": 0,
     "allocation_meta": {
       "population": {
         "method": "aggregation_area_weighted",

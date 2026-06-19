@@ -135,6 +135,7 @@ def main() -> None:
     landuse = by_key(read_analytics("landuse_mix.json"))
     industry = by_key(read_analytics("industry.json"))
     bonus = by_key(read_analytics("bonus_indicators.json"))
+    spatial = by_key(read_analytics("spatial_accessibility.json"))
     existing_validation = read_report("validation_report.json")
     boundary_reports = by_key(read_report("boundary_match_reports.json") or [])
     cheongna_previous = cheongna_previous_boundary_metrics(existing_validation)
@@ -213,6 +214,16 @@ def main() -> None:
                 "nearest_station_m": access.get(key, {}).get("nearest_station_m"),
                 "station_count_2km": access.get(key, {}).get("station_count_2km", 0),
                 "compactness": bonus.get(key, {}).get("compactness", 0),
+                "bus_stop_count": spatial.get(key, {}).get("bus_stop_count"),
+                "bus_stop_density_per_km2": spatial.get(key, {}).get("bus_stop_density_per_km2"),
+                "road_length_km": spatial.get(key, {}).get("road_length_km"),
+                "road_network_density_km_per_km2": spatial.get(key, {}).get("road_network_density_km_per_km2"),
+                "nearest_highway_ic_km": spatial.get(key, {}).get("nearest_highway_ic_km"),
+                "nearest_highway_ic_name": spatial.get(key, {}).get("nearest_highway_ic_name"),
+                "station_area_ratio_500m": spatial.get(key, {}).get("station_area_ratio_500m"),
+                "station_area_ratio_1km": spatial.get(key, {}).get("station_area_ratio_1km"),
+                "station_count_500m": spatial.get(key, {}).get("station_count_500m"),
+                "station_count_1km": spatial.get(key, {}).get("station_count_1km"),
                 "allocation_meta": {
                     "population": pop_meta,
                     "households": household_meta,
@@ -268,6 +279,19 @@ def main() -> None:
             "commuter_workers_60min": round_display(catchment_60.get("allocated_workers")),
             "commuter_workers_delta_60_30": round_display(catchment_60.get("allocated_workers"))
             - round_display(catchment_30.get("allocated_workers")),
+            "bus_stop_count": spatial.get(key, {}).get("bus_stop_count"),
+            "bus_stop_density_per_km2": spatial.get(key, {}).get("bus_stop_density_per_km2"),
+            "bus_stop_note": spatial.get(key, {}).get("bus_stop_note"),
+            "road_length_km": spatial.get(key, {}).get("road_length_km"),
+            "road_network_density_km_per_km2": spatial.get(key, {}).get("road_network_density_km_per_km2"),
+            "road_note": spatial.get(key, {}).get("road_note"),
+            "nearest_highway_ic_km": spatial.get(key, {}).get("nearest_highway_ic_km"),
+            "nearest_highway_ic_name": spatial.get(key, {}).get("nearest_highway_ic_name"),
+            "ic_note": spatial.get(key, {}).get("ic_note"),
+            "station_area_ratio_500m": spatial.get(key, {}).get("station_area_ratio_500m"),
+            "station_area_ratio_1km": spatial.get(key, {}).get("station_area_ratio_1km"),
+            "station_count_500m": spatial.get(key, {}).get("station_count_500m"),
+            "station_count_1km": spatial.get(key, {}).get("station_count_1km"),
             "building_main_use_composition": buildings["main_use_composition"],
         }
         if functional_report:

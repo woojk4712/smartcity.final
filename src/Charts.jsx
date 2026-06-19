@@ -52,6 +52,23 @@ export function Charts({ summary, landuse, accessibility, industry }) {
     '60분 종사자': row.commuter_workers_60min ?? 0,
   }));
 
+  const spatialDensityRows = summary.map((row) => ({
+    name: shortName(row.label),
+    '정류장 밀도': row.bus_stop_density_per_km2 ?? 0,
+    '도로망 밀도': row.road_network_density_km_per_km2 ?? 0,
+  }));
+
+  const icRows = summary.map((row) => ({
+    name: shortName(row.label),
+    '최근접 IC 거리': row.nearest_highway_ic_km ?? 0,
+  }));
+
+  const stationCatchmentRows = summary.map((row) => ({
+    name: shortName(row.label),
+    '500m 역세권': row.station_area_ratio_500m ?? 0,
+    '1km 역세권': row.station_area_ratio_1km ?? 0,
+  }));
+
   const industryNames = Array.from(
     new Set(
       industry.flatMap((area) =>
@@ -78,6 +95,32 @@ export function Charts({ summary, landuse, accessibility, industry }) {
       <MetricChart title="LUM" data={metricRows(summary, 'landuse_mix_index')} unit="" color="#2563eb" />
       <MetricChart title="직주비" data={metricRows(summary, 'job_housing_ratio')} unit="" color="#0f766e" />
       <MetricChart title="평균 용적률" data={metricRows(summary, 'avg_floor_area_ratio', 0)} unit="%" color="#f97316" />
+
+      <Chart title="공간접근성 밀도">
+        <BarChart data={spatialDensityRows}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey="정류장 밀도" fill="#2563eb" radius={[3, 3, 0, 0]} />
+          <Bar dataKey="도로망 밀도" fill="#0f766e" radius={[3, 3, 0, 0]} />
+        </BarChart>
+      </Chart>
+
+      <MetricChart title="최근접 IC 거리" data={icRows.map((row) => ({ name: row.name, value: row['최근접 IC 거리'] }))} unit="km" color="#dc2626" />
+
+      <Chart title="역세권 면적 비율">
+        <BarChart data={stationCatchmentRows}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip formatter={(value) => `${Number(value).toFixed(2)}%`} />
+          <Legend />
+          <Bar dataKey="500m 역세권" fill="#7c3aed" radius={[3, 3, 0, 0]} />
+          <Bar dataKey="1km 역세권" fill="#f97316" radius={[3, 3, 0, 0]} />
+        </BarChart>
+      </Chart>
 
       <Chart title="사업체 · 종사자 규모">
         <BarChart data={scaleRows}>

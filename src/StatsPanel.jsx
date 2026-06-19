@@ -1,16 +1,17 @@
-import { Building2, ClipboardCheck, MapPinned, TrainFront, UsersRound } from 'lucide-react';
+import { Building2, BusFront, ClipboardCheck, MapPinned, Navigation, Route, TrainFront, UsersRound } from 'lucide-react';
 
 const format = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 0 });
 const decimal = new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 });
 
-function Metric({ icon: Icon, label, value, suffix = '' }) {
+function Metric({ icon: Icon, label, value, suffix = '', digits = 0 }) {
   const missing = value === null || value === undefined || Number.isNaN(value);
+  const formatter = digits > 0 ? decimal : format;
   return (
     <div className="metric">
       <Icon size={18} />
       <div>
         <span>{label}</span>
-        <strong>{missing ? '자료 없음' : `${format.format(value)}${suffix}`}</strong>
+        <strong>{missing ? '자료 없음' : `${formatter.format(value)}${suffix}`}</strong>
       </div>
     </div>
   );
@@ -20,6 +21,11 @@ function methodLabel(method) {
   if (method === 'building_main_use_gross_floor_area') return '건축물 주용도 연면적 기준';
   if (method === 'zoning_area') return '용도지역 면적 기준';
   return method || '자료 없음';
+}
+
+function valueOrMissing(value, formatter = format, suffix = '') {
+  if (value === null || value === undefined || Number.isNaN(value)) return '자료 없음';
+  return `${formatter.format(value)}${suffix}`;
 }
 
 export function StatsPanel({ summary, validation, mode }) {
@@ -59,6 +65,11 @@ export function StatsPanel({ summary, validation, mode }) {
               <Metric icon={TrainFront} label="60분 통근권 인구" value={row.commuter_population_60min} suffix="명" />
               <Metric icon={Building2} label="30분 통근권 종사자" value={row.commuter_workers_30min} suffix="명" />
               <Metric icon={Building2} label="60분 통근권 종사자" value={row.commuter_workers_60min} suffix="명" />
+              <Metric icon={BusFront} label="정류장 밀도" value={row.bus_stop_density_per_km2} suffix="개/km²" digits={2} />
+              <Metric icon={Route} label="도로망 밀도" value={row.road_network_density_km_per_km2} suffix="km/km²" digits={2} />
+              <Metric icon={Navigation} label="최근접 IC" value={row.nearest_highway_ic_km} suffix="km" digits={2} />
+              <Metric icon={TrainFront} label="500m 역세권 비율" value={row.station_area_ratio_500m} suffix="%" digits={2} />
+              <Metric icon={TrainFront} label="1km 역세권 비율" value={row.station_area_ratio_1km} suffix="%" digits={2} />
             </div>
           </article>
         ))}
@@ -93,6 +104,14 @@ export function StatsPanel({ summary, validation, mode }) {
                 ['60분 통근권 인구(명)', (r) => format.format(r.commuter_population_60min)],
                 ['30분 통근권 종사자(명)', (r) => format.format(r.commuter_workers_30min)],
                 ['60분 통근권 종사자(명)', (r) => format.format(r.commuter_workers_60min)],
+                ['정류장 수(개)', (r) => valueOrMissing(r.bus_stop_count)],
+                ['정류장 밀도(개/km²)', (r) => valueOrMissing(r.bus_stop_density_per_km2, decimal)],
+                ['도로 총연장(km)', (r) => valueOrMissing(r.road_length_km, decimal)],
+                ['도로망 밀도(km/km²)', (r) => valueOrMissing(r.road_network_density_km_per_km2, decimal)],
+                ['최근접 IC 거리(km)', (r) => valueOrMissing(r.nearest_highway_ic_km, decimal)],
+                ['최근접 IC', (r) => r.nearest_highway_ic_name || '자료 없음'],
+                ['500m 역세권 면적 비율(%)', (r) => valueOrMissing(r.station_area_ratio_500m, decimal)],
+                ['1km 역세권 면적 비율(%)', (r) => valueOrMissing(r.station_area_ratio_1km, decimal)],
               ].map(([label, getter]) => (
                 <tr key={label}>
                   <th>{label}</th>
@@ -157,6 +176,11 @@ export function StatsPanel({ summary, validation, mode }) {
                 <span>60분 도달 역 {format.format(item.reachable_station_60_count || 0)}개</span>
                 <span>60분-30분 인구 증가 {format.format(item.commuter_population_delta_60_30 || 0)}명</span>
                 <span>60분-30분 종사자 증가 {format.format(item.commuter_workers_delta_60_30 || 0)}명</span>
+                <span>정류장 밀도 {valueOrMissing(item.bus_stop_density_per_km2, decimal, '개/km²')}</span>
+                <span>도로망 밀도 {valueOrMissing(item.road_network_density_km_per_km2, decimal, 'km/km²')}</span>
+                <span>최근접 IC {valueOrMissing(item.nearest_highway_ic_km, decimal, 'km')}</span>
+                <span>500m 역세권 {valueOrMissing(item.station_area_ratio_500m, decimal, '%')}</span>
+                <span>1km 역세권 {valueOrMissing(item.station_area_ratio_1km, decimal, '%')}</span>
               </div>
             );
           })}

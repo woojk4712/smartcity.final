@@ -11,6 +11,7 @@ SCRIPTS = [
     "calculate_landuse_mix.py",
     "calculate_industry.py",
     "calculate_bonus_indicators.py",
+    "calculate_spatial_accessibility.py",
     "calculate_summary.py",
 ]
 
