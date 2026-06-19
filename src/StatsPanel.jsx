@@ -28,6 +28,13 @@ function valueOrMissing(value, formatter = format, suffix = '') {
   return `${formatter.format(value)}${suffix}`;
 }
 
+function stationLabel(station) {
+  const name = station.station_name || '역명 없음';
+  const line = station.line_name ? `(${station.line_name})` : '';
+  const distance = valueOrMissing(station.distance_to_boundary_m, decimal, 'm');
+  return `${name}${line} ${distance} · ${station.lat}, ${station.lon}`;
+}
+
 export function StatsPanel({ summary, validation, mode }) {
   const rows = mode === 'compare' ? summary : summary.filter((row) => row.area_key === mode);
   return (
@@ -181,6 +188,26 @@ export function StatsPanel({ summary, validation, mode }) {
                 <span>최근접 IC {valueOrMissing(item.nearest_highway_ic_km, decimal, 'km')}</span>
                 <span>500m 역세권 {valueOrMissing(item.station_area_ratio_500m, decimal, '%')}</span>
                 <span>1km 역세권 {valueOrMissing(item.station_area_ratio_1km, decimal, '%')}</span>
+                <span>500m 교차 역 {format.format(item.station_count_500m || 0)}개</span>
+                <span>1km 교차 역 {format.format(item.station_count_1km || 0)}개</span>
+                <span>500m 교차면적 {valueOrMissing(item.station_intersection_area_500m_m2, decimal, 'm²')}</span>
+                <span>1km 교차면적 {valueOrMissing(item.station_intersection_area_1km_m2, decimal, 'm²')}</span>
+                <div className="validation-detail">
+                  <b>역세권 산정 역(1km)</b>
+                  {(item.station_used_list_1km || []).length ? (
+                    item.station_used_list_1km.map((station) => <small key={`${station.station_id}-1km`}>{stationLabel(station)}</small>)
+                  ) : (
+                    <small>1km 버퍼가 업무지구와 교차하는 역 없음</small>
+                  )}
+                </div>
+                <div className="validation-detail">
+                  <b>최근접 역 검증</b>
+                  {(item.station_nearest_list || []).slice(0, 3).map((station) => (
+                    <small key={`${station.station_id}-near`}>{stationLabel(station)}</small>
+                  ))}
+                  {item.station_zero_result_validation && <small>{item.station_zero_result_validation.result}</small>}
+                  {item.station_zero_result_validation && <small>계산 CRS: {item.station_zero_result_validation.crs_metric}</small>}
+                </div>
               </div>
             );
           })}

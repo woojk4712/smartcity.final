@@ -219,14 +219,55 @@ def nearest_ic(area_key: str, boundary: gpd.GeoDataFrame) -> dict:
 def station_area_ratios(boundary: gpd.GeoDataFrame, stations: gpd.GeoDataFrame) -> dict:
     geom = boundary.geometry.iloc[0]
     area_m2 = float(geom.area)
+    stations_metric = stations.copy()
+    stations_metric["distance_to_boundary_m"] = stations_metric.geometry.distance(geom)
+    stations_wgs = stations_metric.to_crs("EPSG:4326")
     ratios = {}
     counts = {}
+    used = {}
     for radius in [500, 1000]:
-        buffers = stations.geometry.buffer(radius).union_all()
-        inter_area = float(buffers.intersection(geom).area)
+        selected = stations_metric[stations_metric["distance_to_boundary_m"] <= radius].copy()
+        buffers = selected.geometry.buffer(radius).union_all() if not selected.empty else None
+        inter_area = float(buffers.intersection(geom).area) if buffers is not None else 0.0
+        selected_wgs = stations_wgs.loc[selected.index]
+        used[f"used_stations_{radius}m"] = [
+            {
+                "station_id": str(row.get("id")),
+                "station_name": row.get("statnm"),
+                "line_name": row.get("linenm"),
+                "lon": round(float(row.geometry.x), 6),
+                "lat": round(float(row.geometry.y), 6),
+                "distance_to_boundary_m": round(float(row.get("distance_to_boundary_m")), 1),
+            }
+            for _, row in selected_wgs.sort_values("distance_to_boundary_m").iterrows()
+        ]
         ratios[f"ratio_{radius}m"] = round((inter_area / area_m2) * 100, 2) if area_m2 else None
-        counts[f"station_count_{radius}m"] = int((stations.geometry.distance(geom) <= radius).sum())
-    return {**ratios, **counts}
+        ratios[f"intersection_area_{radius}m_m2"] = round(inter_area, 1)
+        counts[f"station_count_{radius}m"] = int(len(selected))
+
+    nearest_wgs = stations_wgs.sort_values("distance_to_boundary_m").head(5)
+    nearest = [
+        {
+            "station_id": str(row.get("id")),
+            "station_name": row.get("statnm"),
+            "line_name": row.get("linenm"),
+            "lon": round(float(row.geometry.x), 6),
+            "lat": round(float(row.geometry.y), 6),
+            "distance_to_boundary_m": round(float(row.get("distance_to_boundary_m")), 1),
+        }
+        for _, row in nearest_wgs.iterrows()
+    ]
+    zero_check = {
+        "crs_metric": CRS_METRIC,
+        "station_source_crs": "subway_network nodes.tsv geometry_wkt EPSG:5179 -> metric CRS",
+        "buffer_method": "station point buffer in metric CRS, intersect with business district polygon, divide by polygon area",
+        "boundary_area_m2": round(area_m2, 1),
+        "nearest_station_distance_m": nearest[0]["distance_to_boundary_m"] if nearest else None,
+        "result": "0% is expected because no active station point buffer intersects the polygon within 1km"
+        if counts["station_count_1000m"] == 0
+        else "station buffers intersect polygon",
+    }
+    return {**ratios, **counts, **used, "nearest_stations": nearest, "station_zero_result_validation": zero_check}
 
 
 def main() -> None:
@@ -260,8 +301,14 @@ def main() -> None:
             "ic_note": ic["note"],
             "station_area_ratio_500m": station["ratio_500m"],
             "station_area_ratio_1km": station["ratio_1000m"],
+            "station_intersection_area_500m_m2": station["intersection_area_500m_m2"],
+            "station_intersection_area_1km_m2": station["intersection_area_1000m_m2"],
             "station_count_500m": station["station_count_500m"],
             "station_count_1km": station["station_count_1000m"],
+            "station_used_list_500m": station["used_stations_500m"],
+            "station_used_list_1km": station["used_stations_1000m"],
+            "station_nearest_list": station["nearest_stations"],
+            "station_zero_result_validation": station["station_zero_result_validation"],
             "station_catchment_source": "subway_network/network/nodes.tsv; 2023-12-31 기준 운영 중 역",
             "method": "구역 경계는 EPSG:5186에서 면적·거리 계산 후 결과 GeoJSON/JSON 저장",
             "osm_calculation": {
