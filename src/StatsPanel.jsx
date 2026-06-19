@@ -197,6 +197,14 @@ export function StatsPanel({ summary, validation, mode }) {
                 <span>500m 교차면적 {valueOrMissing(item.station_intersection_area_500m_m2, decimal, 'm²')}</span>
                 <span>1km 교차면적 {valueOrMissing(item.station_intersection_area_1km_m2, decimal, 'm²')}</span>
                 <div className="validation-detail">
+                  <b>통근권 종사자 검증</b>
+                  <small>{item.commuter_workers_validation_note || '검증 메모 없음'}</small>
+                </div>
+                <div className="validation-detail">
+                  <b>OSM 정류장 경계 검증</b>
+                  <small>{item.bus_stop_validation_note || '검증 메모 없음'}</small>
+                </div>
+                <div className="validation-detail">
                   <b>역세권 산정 역(1km)</b>
                   {(item.station_used_list_1km || []).length ? (
                     item.station_used_list_1km.map((station) => <small key={`${station.station_id}-1km`}>{stationLabel(station)}</small>)

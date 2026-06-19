@@ -137,6 +137,33 @@ def catchment_meta_features(item: dict, key: str) -> int:
     return int(sum((region or {}).get("features", 0) for region in meta.get("regions", {}).values()))
 
 
+def commuter_workers_validation_note(catchment_30: dict, catchment_60: dict) -> str:
+    stations_30 = int(catchment_30.get("reachable_station_count") or 0)
+    stations_60 = int(catchment_60.get("reachable_station_count") or 0)
+    workers_30 = round_display(catchment_30.get("allocated_workers"))
+    workers_60 = round_display(catchment_60.get("allocated_workers"))
+    station_delta = stations_60 - stations_30
+    worker_delta = workers_60 - workers_30
+    if station_delta > 0 and workers_30 and abs(worker_delta) / workers_30 < 0.001:
+        return (
+            f"다익스트라 탐색은 30분 {stations_30}개 역에서 60분 {stations_60}개 역으로 확대되지만, "
+            f"SGIS 종사자 배분값은 30분권에서 거의 포화되어 60분 증가폭이 {worker_delta:,}명으로 작다."
+        )
+    return (
+        f"다익스트라 탐색 결과 30분 {stations_30}개 역, 60분 {stations_60}개 역이 도달 가능하며 "
+        f"종사자 증가폭은 {worker_delta:,}명이다."
+    )
+
+
+def osm_bus_validation_note(spatial_row: dict) -> str:
+    validation = spatial_row.get("bus_stop_validation") or {}
+    return (
+        "OSM bus_stop/bus_station은 구역 외곽 500m bbox로 후보를 조회한 뒤, "
+        f"EPSG:5186에서 구역 Polygon 내부에 있는 점만 최종 집계했다. "
+        f"후보 {validation.get('unique_point_count', 0)}개 중 내부 {validation.get('within_boundary_count', 0)}개를 사용했다."
+    )
+
+
 def cheongna_previous_boundary_metrics(existing_validation: dict) -> dict | None:
     old = existing_validation.get("cheongna", {}) if isinstance(existing_validation, dict) else {}
     if old.get("boundary_comparison", {}).get("previous"):
@@ -207,6 +234,8 @@ def main() -> None:
         catchment = {item["minutes"]: item for item in access.get(key, {}).get("cumulative_accessibility", [])}
         catchment_30 = catchment.get(30, {})
         catchment_60 = catchment.get(60, {})
+        accessibility_note = commuter_workers_validation_note(catchment_30, catchment_60)
+        bus_validation_note = osm_bus_validation_note(spatial.get(key, {}) or {})
         pop_int = round_display(allocated_population)
         households_int = round_display(allocated_households)
         workers_int = round_display(allocated_workers)
@@ -249,6 +278,7 @@ def main() -> None:
                 "commuter_population_60min": round_display(catchment_60.get("allocated_population")),
                 "commuter_workers_30min": round_display(catchment_30.get("allocated_workers")),
                 "commuter_workers_60min": round_display(catchment_60.get("allocated_workers")),
+                "commuter_workers_validation_note": accessibility_note,
                 "population_density_per_km2": round(allocated_population / (area_m2 / 1_000_000), 1) if area_m2 else 0,
                 "landuse_mix_index": landuse.get(key, {}).get("landuse_mix_index", 0),
                 "zoning_landuse_mix_index": landuse.get(key, {}).get("zoning_landuse_mix_index"),
@@ -277,6 +307,7 @@ def main() -> None:
                 "compactness": bonus.get(key, {}).get("compactness", 0),
                 "bus_stop_count": spatial.get(key, {}).get("bus_stop_count"),
                 "bus_stop_density_per_km2": spatial.get(key, {}).get("bus_stop_density_per_km2"),
+                "bus_stop_validation_note": bus_validation_note,
                 "road_length_km": spatial.get(key, {}).get("road_length_km"),
                 "road_network_density_km_per_km2": spatial.get(key, {}).get("road_network_density_km_per_km2"),
                 "nearest_highway_ic_km": spatial.get(key, {}).get("nearest_highway_ic_km"),
@@ -360,10 +391,12 @@ def main() -> None:
             "commuter_workers_60min": round_display(catchment_60.get("allocated_workers")),
             "commuter_workers_delta_60_30": round_display(catchment_60.get("allocated_workers"))
             - round_display(catchment_30.get("allocated_workers")),
+            "commuter_workers_validation_note": accessibility_note,
             "bus_stop_count": spatial.get(key, {}).get("bus_stop_count"),
             "bus_stop_density_per_km2": spatial.get(key, {}).get("bus_stop_density_per_km2"),
             "bus_stop_source": spatial.get(key, {}).get("bus_stop_source"),
             "bus_stop_note": spatial.get(key, {}).get("bus_stop_note"),
+            "bus_stop_validation_note": bus_validation_note,
             "bus_stop_validation": spatial.get(key, {}).get("bus_stop_validation"),
             "road_length_km": spatial.get(key, {}).get("road_length_km"),
             "road_network_density_km_per_km2": spatial.get(key, {}).get("road_network_density_km_per_km2"),

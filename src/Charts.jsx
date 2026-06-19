@@ -27,7 +27,27 @@ function metricRows(summary, key, fallback = 0) {
   }));
 }
 
+function jobHousingRows(summary) {
+  return summary.map((row, index) => ({
+    name: shortName(row.label),
+    value: Number(row.job_housing_ratio ?? 0),
+    fill: colors[index % colors.length],
+  }));
+}
+
+function jobHousingComparison(rows) {
+  const valid = rows.filter((row) => row.value > 0).sort((a, b) => b.value - a.value);
+  if (valid.length < 2) return null;
+  return {
+    high: valid[0].name,
+    low: valid[valid.length - 1].name,
+    multiple: valid[0].value / valid[valid.length - 1].value,
+  };
+}
+
 export function Charts({ summary, landuse, accessibility, industry }) {
+  const jobRows = jobHousingRows(summary);
+  const jobComparison = jobHousingComparison(jobRows);
   const scaleRows = summary.map((row) => ({
     name: shortName(row.label),
     사업체수: row.display_businesses ?? 0,
@@ -93,7 +113,7 @@ export function Charts({ summary, landuse, accessibility, industry }) {
   return (
     <section className="chart-grid">
       <MetricChart title="LUM" data={metricRows(summary, 'landuse_mix_index')} unit="" color="#2563eb" />
-      <MetricChart title="직주비" data={metricRows(summary, 'job_housing_ratio')} unit="" color="#0f766e" />
+      <JobHousingChart data={jobRows} comparison={jobComparison} />
       <MetricChart title="평균 용적률" data={metricRows(summary, 'avg_floor_area_ratio', 0)} unit="%" color="#f97316" />
 
       <Chart title="공간접근성 밀도">
@@ -219,6 +239,44 @@ function MetricChart({ title, data, unit, color }) {
         <Bar dataKey="value" name={title} fill={color} radius={[3, 3, 0, 0]} />
       </BarChart>
     </Chart>
+  );
+}
+
+function JobHousingChart({ data, comparison }) {
+  const maxValue = Math.max(...data.map((row) => row.value), 1);
+  const domainMax = Math.max(1, Math.ceil(maxValue * 1.25));
+
+  return (
+    <article className="chart-panel job-housing-panel">
+      <h2>직주비</h2>
+      {comparison && (
+        <div className="chart-note">
+          <span>로그 스케일</span>
+          <strong>
+            {comparison.high} 직주비는 {comparison.low}의 약 {comparison.multiple.toFixed(1)}배
+          </strong>
+        </div>
+      )}
+      <ResponsiveContainer width="100%" height={196}>
+        <BarChart data={data}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis
+            type="number"
+            scale="log"
+            domain={[0.1, domainMax]}
+            allowDataOverflow
+            tickFormatter={(value) => (Number(value) < 1 ? Number(value).toFixed(1) : Number(value).toFixed(0))}
+          />
+          <Tooltip formatter={(value) => Number(value).toFixed(3)} />
+          <Bar dataKey="value" name="직주비" radius={[3, 3, 0, 0]}>
+            {data.map((entry) => (
+              <Cell key={entry.name} fill={entry.fill} />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+    </article>
   );
 }
 
