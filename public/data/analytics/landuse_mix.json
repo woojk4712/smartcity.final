@@ -187,150 +187,150 @@
       },
       {
         "class": "상업",
-        "share": 0.0678,
-        "area_m2": 31560.1
+        "share": 0.0807,
+        "area_m2": 117723.7
       },
       {
         "class": "주거",
-        "share": 0.0313,
-        "area_m2": 14574.9
+        "share": 0.0282,
+        "area_m2": 41166.1
       },
       {
         "class": "교육연구",
-        "share": 0.0261,
-        "area_m2": 12178.3
+        "share": 0.0009,
+        "area_m2": 1258.7
       },
       {
         "class": "공공",
-        "share": 0.1012,
-        "area_m2": 47134.9
+        "share": 0.1931,
+        "area_m2": 281600.6
       },
       {
         "class": "기타",
-        "share": 0.7736,
-        "area_m2": 360342.9
+        "share": 0.6971,
+        "area_m2": 1016608.2
       }
     ],
     "zone_details": [
       {
-        "zone": "지구단위계획구역",
-        "area_m2": 44135.0,
-        "share": 0.0948
+        "zone": "가축사육제한구역",
+        "area_m2": 108025.4,
+        "share": 0.0741
       },
       {
-        "zone": "성장관리권역",
-        "area_m2": 44135.0,
-        "share": 0.0948
+        "zone": "지구단위계획구역",
+        "area_m2": 105924.5,
+        "share": 0.0726
       },
       {
         "zone": "경제자유구역",
-        "area_m2": 44135.0,
-        "share": 0.0948
+        "area_m2": 105924.5,
+        "share": 0.0726
       },
       {
-        "zone": "가축사육제한구역",
-        "area_m2": 44135.0,
-        "share": 0.0948
+        "zone": "성장관리권역",
+        "area_m2": 105924.5,
+        "share": 0.0726
       },
       {
         "zone": "토지거래계약에관한허가구역",
-        "area_m2": 44135.0,
-        "share": 0.0948
+        "area_m2": 105924.5,
+        "share": 0.0726
       },
       {
         "zone": "중점경관관리구역",
-        "area_m2": 44135.0,
-        "share": 0.0948
-      },
-      {
-        "zone": "중로1류(폭 20m~25m)",
-        "area_m2": 43721.0,
-        "share": 0.0939
-      },
-      {
-        "zone": "중로2류(폭 15m~20m)",
-        "area_m2": 27618.0,
-        "share": 0.0593
-      },
-      {
-        "zone": "일반상업지역",
-        "area_m2": 16542.2,
-        "share": 0.0355
-      },
-      {
-        "zone": "문화공원",
-        "area_m2": 15415.4,
-        "share": 0.0331
-      },
-      {
-        "zone": "자연녹지지역",
-        "area_m2": 15415.4,
-        "share": 0.0331
-      },
-      {
-        "zone": "중심상업지역",
-        "area_m2": 15018.0,
-        "share": 0.0322
-      },
-      {
-        "zone": "교육환경보호구역",
-        "area_m2": 12178.3,
-        "share": 0.0261
-      },
-      {
-        "zone": "제3종일반주거지역",
-        "area_m2": 10374.8,
-        "share": 0.0223
-      },
-      {
-        "zone": "상대보호구역",
-        "area_m2": 10235.7,
-        "share": 0.022
-      },
-      {
-        "zone": "완충녹지",
-        "area_m2": 10143.0,
-        "share": 0.0218
-      },
-      {
-        "zone": "국토이용용도지역기타",
-        "area_m2": 9960.0,
-        "share": 0.0214
+        "area_m2": 102929.8,
+        "share": 0.0706
       },
       {
         "zone": "공공공지",
-        "area_m2": 6161.0,
-        "share": 0.0132
+        "area_m2": 95785.0,
+        "share": 0.0657
       },
       {
-        "zone": "제2종일반주거지역",
-        "area_m2": 2200.1,
-        "share": 0.0047
+        "zone": "중로1류(폭 20m~25m)",
+        "area_m2": 83634.8,
+        "share": 0.0573
       },
       {
-        "zone": "준주거지역",
-        "area_m2": 2000.1,
-        "share": 0.0043
+        "zone": "중심상업지역",
+        "area_m2": 74576.5,
+        "share": 0.0511
+      },
+      {
+        "zone": "완충녹지",
+        "area_m2": 68037.0,
+        "share": 0.0467
+      },
+      {
+        "zone": "국토이용용도지역기타",
+        "area_m2": 56009.8,
+        "share": 0.0384
+      },
+      {
+        "zone": "자연녹지지역",
+        "area_m2": 49254.6,
+        "share": 0.0338
+      },
+      {
+        "zone": "중로2류(폭 15m~20m)",
+        "area_m2": 48557.2,
+        "share": 0.0333
+      },
+      {
+        "zone": "대로3류(폭 25m~30m)",
+        "area_m2": 45658.0,
+        "share": 0.0313
+      },
+      {
+        "zone": "문화공원",
+        "area_m2": 44692.3,
+        "share": 0.0306
+      },
+      {
+        "zone": "일반상업지역",
+        "area_m2": 43147.1,
+        "share": 0.0296
+      },
+      {
+        "zone": "대로1류(폭 35m~40m)",
+        "area_m2": 33281.1,
+        "share": 0.0228
+      },
+      {
+        "zone": "상대보호구역",
+        "area_m2": 29559.9,
+        "share": 0.0203
+      },
+      {
+        "zone": "제3종일반주거지역",
+        "area_m2": 18030.2,
+        "share": 0.0124
+      },
+      {
+        "zone": "도시철도",
+        "area_m2": 17559.0,
+        "share": 0.012
       }
     ],
     "unmatched_area_m2": 0.0,
-    "zoning_landuse_mix_index": 0.456,
-    "building_landuse_mix_index": 0.58,
+    "zoning_landuse_mix_index": 0.491,
+    "building_landuse_mix_index": 0.526,
     "building_use_classes": [
       {
         "class": "업무",
-        "share": 0.609,
-        "gross_floor_area_m2": 1313802.5
+        "share": 0.6178,
+        "gross_floor_area_m2": 1311071.4
       },
       {
         "class": "상업",
-        "share": 0.2484,
-        "gross_floor_area_m2": 535864.0
+        "share": 0.2626,
+        "gross_floor_area_m2": 557320.6
       },
       {
         "class": "주거",
-        "share": 0.0086,
-        "gross_floor_area_m2": 18660.8
+        "share": 0.0,
+        "gross_floor_area_m2": 0.0
       },
       {
         "class": "교육연구",
@@ -339,16 +339,16 @@
       },
       {
         "class": "공공",
-        "share": 0.0397,
-        "gross_floor_area_m2": 85682.2
+        "share": 0.0122,
+        "gross_floor_area_m2": 25991.6
       },
       {
         "class": "기타",
-        "share": 0.0943,
-        "gross_floor_area_m2": 203473.8
+        "share": 0.1074,
+        "gross_floor_area_m2": 227879.5
       }
     ],
-    "landuse_mix_index": 0.58,
+    "landuse_mix_index": 0.526,
     "lum_method": "building_main_use_gross_floor_area"
   }
 ]

@@ -29,6 +29,8 @@ PUBLIC_EXCLUDE_KEYWORDS = ["학교", "공원", "녹지", "공공공지", "완충
 RESIDENTIAL_ONLY_KEYWORDS = ["단독주택", "공동주택", "아파트", "다가구"]
 FACILITY_MANAGEMENT_KEYWORDS = ["음악분수", "제어실", "변전실", "펌프실", "기계실", "전기실", "관리동", "관리실", "시설관리"]
 FUNCTIONAL_SCORE_THRESHOLD = 3.0
+CHEONGNA_PLANNING_INCLUDE_ZONES = ["중심상업지역", "일반상업지역"]
+CHEONGNA_PLANNING_EXCLUDE_SUFFIXES = ["공", "녹", "학"]
 
 
 def _read_cheongna_landuse(pnus: set[str]) -> dict[str, list[str]]:
@@ -88,6 +90,7 @@ def _cheongna_building_metrics(pnus: set[str]) -> dict[str, dict]:
             pnu,
             {
                 "building_count": 0,
+                "building_area_m2": 0.0,
                 "office_gfa_m2": 0.0,
                 "commercial_gfa_m2": 0.0,
                 "total_gfa_m2": 0.0,
@@ -100,6 +103,7 @@ def _cheongna_building_metrics(pnus: set[str]) -> dict[str, dict]:
             },
         )
         item["building_count"] += 1
+        item["building_area_m2"] += parse_float(row.get("건축면적(㎡)")) or 0.0
         item["total_gfa_m2"] += gfa
         if main_use:
             item["main_uses"].add(main_use)
@@ -117,6 +121,99 @@ def _cheongna_building_metrics(pnus: set[str]) -> dict[str, dict]:
             item["has_facility_management_only"] = True
             item["facility_management_names"].add(building_name or other_use or main_use)
     return result
+
+
+def _jibun_endswith(value, suffixes: list[str]) -> bool:
+    text = re.sub(r"\s+", "", str(value or ""))
+    return any(text.endswith(suffix) for suffix in suffixes)
+
+
+def _cheongna_planning_filter(parcels: gpd.GeoDataFrame) -> tuple[gpd.GeoDataFrame, dict]:
+    parcels = parcels.copy()
+    pnu_set = set(parcels["PNU_NORM"])
+    landuse = _read_cheongna_landuse(pnu_set)
+    selected = []
+    reasons = []
+    excluded_public = []
+
+    for _, row in parcels.iterrows():
+        pnu = str(row["PNU_NORM"])
+        zones = landuse.get(pnu, [])
+        zone_text = " ".join(zones)
+        included_zones = [zone for zone in CHEONGNA_PLANNING_INCLUDE_ZONES if zone in zone_text]
+        is_public_lot = _jibun_endswith(row.get("JIBUN"), CHEONGNA_PLANNING_EXCLUDE_SUFFIXES)
+        selected_flag = bool(included_zones) and not is_public_lot
+        selected.append(selected_flag)
+        if selected_flag:
+            reasons.append("고시 용도지역 포함: " + ", ".join(included_zones))
+        elif included_zones and is_public_lot:
+            reason = "고시 용도지역 중첩이나 공원·녹지·학교 지목 제외"
+            reasons.append(reason)
+            excluded_public.append(
+                {
+                    "pnu": pnu,
+                    "jibun": str(row.get("JIBUN")),
+                    "zones": zones,
+                    "area_m2": round(float(row.geometry.area), 1),
+                    "reason": reason,
+                }
+            )
+        else:
+            reasons.append("국제업무·업무상업 고시 용도지역 기준 미해당")
+
+    parcels["planning_boundary_reason"] = reasons
+    parcels["boundary_rule"] = (
+        "IFEZ 지구단위계획 결정고시 기준: 중심상업지역·일반상업지역 지정 필지 전체"
+        "(공원·녹지·학교 지목 제외, 건축물 입지 여부 미사용)"
+    )
+    filtered = parcels[selected].copy()
+    if filtered.empty:
+        raise RuntimeError("cheongna: no parcels selected by planning/gosi boundary criteria.")
+
+    building_totals = _cheongna_building_metrics(set(filtered["PNU_NORM"]))
+    included_building_count = sum(int(v.get("building_count", 0) or 0) for v in building_totals.values())
+    included_office_gfa = sum(_safe_float(v.get("office_gfa_m2")) for v in building_totals.values())
+    included_commercial_gfa = sum(_safe_float(v.get("commercial_gfa_m2")) for v in building_totals.values())
+    included_building_area = sum(_safe_float(v.get("building_area_m2")) for v in building_totals.values())
+    selected_area = float(filtered.geometry.area.sum())
+    built_pnus = set(building_totals)
+    vacant = filtered[~filtered["PNU_NORM"].isin(built_pnus)]
+    vacant_area = float(vacant.geometry.area.sum())
+
+    geom = filtered.geometry.union_all()
+    workers, _ = allocated_sgis_for_geometry("cheongna", geom, SGIS_KEYWORDS["workers"])
+    businesses, _ = allocated_sgis_for_geometry("cheongna", geom, SGIS_KEYWORDS["businesses_total"])
+    if not businesses:
+        businesses, _ = allocated_sgis_for_geometry("cheongna", geom, SGIS_KEYWORDS["businesses"])
+
+    report = {
+        "filter_rule": filtered["boundary_rule"].iloc[0],
+        "source_note": "청라 구역계는 사후적 활성 필지 클러스터가 아니라 IFEZ 지구단위계획 결정고시의 업무·상업계획 용도지역을 외생적 경계로 정의하였다.",
+        "candidate_before_count": int(len(parcels)),
+        "selected_count": int(len(filtered)),
+        "candidate_area_m2": round(float(parcels.geometry.area.sum()), 1),
+        "selected_area_m2": round(selected_area, 1),
+        "included_building_count": int(included_building_count),
+        "included_office_gfa_m2": round(float(included_office_gfa), 1),
+        "included_commercial_gfa_m2": round(float(included_commercial_gfa), 1),
+        "included_building_footprint_m2": round(float(included_building_area), 1),
+        "included_businesses": round(float(businesses), 1),
+        "included_workers": round(float(workers), 1),
+        "planning_include_zones": CHEONGNA_PLANNING_INCLUDE_ZONES,
+        "planning_exclusion_rule": "공원·녹지·학교 지목 필지는 제외하되, 건축물 입지 여부와 주용도는 경계 선정에 사용하지 않는다.",
+        "excluded_public_lot_count": int(len(excluded_public)),
+        "excluded_public_lots": excluded_public[:50],
+        "built_parcel_count": int(len(built_pnus)),
+        "vacant_parcel_count": int(len(vacant)),
+        "vacant_parcel_area_m2": round(vacant_area, 1),
+        "vacant_parcel_area_ratio": round(vacant_area / selected_area, 4) if selected_area else None,
+        "building_footprint_area_ratio": round(included_building_area / selected_area, 4) if selected_area else None,
+        "selected_reason_counts": {
+            str(reason): int(count)
+            for reason, count in filtered["planning_boundary_reason"].value_counts().head(20).items()
+        },
+    }
+    return filtered, report
 
 
 def _previous_cheongna_metrics() -> dict | None:
@@ -323,7 +420,7 @@ def build_boundary(area_key: str) -> dict:
     matched_all = parcels[parcels["PNU_NORM"].isin(wanted)].copy()
     filter_report = None
     if area_key == "cheongna":
-        matched, filter_report = _cheongna_functional_filter(matched_all)
+        matched, filter_report = _cheongna_planning_filter(matched_all)
     else:
         matched = matched_all.copy()
         matched["boundary_rule"] = "성남판교 도시지원시설용지 소재지 PNU 전체"
