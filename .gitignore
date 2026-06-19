@@ -8,3 +8,4 @@ __pycache__/
 청라/인천_토지이용계획/*.csv
 판교/판교_토지이용계획.zip
 pages_deploy/
+public/data/osm/

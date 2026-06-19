@@ -1,164 +1,218 @@
 from __future__ import annotations
 
-from pathlib import Path
+import json
+import time
 
 import geopandas as gpd
-import pandas as pd
+import requests
+from shapely.geometry import LineString, Point, Polygon
 
 from calculate_accessibility import load_active_network
-from common import AREAS, CRS_METRIC, OUT, ROOT, ensure_dirs, load_boundary, write_json
+from common import AREAS, CRS_METRIC, OUT, ensure_dirs, load_boundary, write_json
 
 
-BUS_SOURCES = {
-    "pangyo": ROOT / "판교" / "경기도 성남시 버스정류장 현황_20240329.csv",
-    "cheongna": ROOT / "청라" / "인천광역시_정류장별 이용승객현황_20231130.csv",
+OVERPASS_URLS = [
+    "https://overpass-api.de/api/interpreter",
+    "https://lz4.overpass-api.de/api/interpreter",
+    "https://z.overpass-api.de/api/interpreter",
+    "https://overpass.kumi.systems/api/interpreter",
+]
+OVERPASS_HEADERS = {
+    "User-Agent": "smartcity-final-gis/1.0 (https://github.com/woojk4712/smartcity.final)",
+    "Accept": "application/json,*/*",
+}
+OSM_CACHE_DIR = OUT / "osm"
+ROAD_HIGHWAY_CLASSES = {
+    "motorway",
+    "motorway_link",
+    "trunk",
+    "trunk_link",
+    "primary",
+    "primary_link",
+    "secondary",
+    "secondary_link",
+    "tertiary",
+    "tertiary_link",
+    "unclassified",
+    "residential",
+    "living_street",
+    "service",
 }
 
-ROAD_FILE_KEYWORDS = ["road", "roads", "도로", "osm"]
-IC_FILE_KEYWORDS = ["ic", "interchange", "고속도로", "나들목"]
-SPATIAL_EXTENSIONS = {".shp", ".geojson", ".gpkg"}
+
+def bbox_for(boundary: gpd.GeoDataFrame, buffer_m: float = 0) -> tuple[float, float, float, float]:
+    geom = boundary.geometry.iloc[0]
+    if buffer_m:
+        geom = geom.buffer(buffer_m)
+    minx, miny, maxx, maxy = gpd.GeoSeries([geom], crs=CRS_METRIC).to_crs("EPSG:4326").total_bounds
+    return float(miny), float(minx), float(maxy), float(maxx)
 
 
-def read_csv_any(path: Path) -> pd.DataFrame | None:
-    if not path.exists():
-        return None
-    for encoding in ["utf-8-sig", "utf-8", "cp949", "euc-kr"]:
+def overpass_query(query: str, cache_name: str) -> dict:
+    OSM_CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cache_path = OSM_CACHE_DIR / cache_name
+    if cache_path.exists():
+        return json.loads(cache_path.read_text(encoding="utf-8"))
+
+    last_error: Exception | None = None
+    for url in OVERPASS_URLS:
         try:
-            return pd.read_csv(path, dtype=str, encoding=encoding)
-        except UnicodeDecodeError:
-            continue
-    return pd.read_csv(path, dtype=str, encoding="utf-8", encoding_errors="ignore")
+            response = requests.post(url, data={"data": query}, headers=OVERPASS_HEADERS, timeout=180)
+            response.raise_for_status()
+            data = response.json()
+            data["_overpass_url"] = url
+            break
+        except Exception as exc:
+            last_error = exc
+    else:
+        raise RuntimeError(f"Overpass API request failed: {last_error}") from last_error
+    cache_path.write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Keep the public Overpass endpoint comfortable when both areas are fetched in one run.
+    time.sleep(1)
+    return data
 
 
-def first_existing(columns: list[str], candidates: list[str]) -> str | None:
-    normalized = {str(col).strip().lower(): col for col in columns}
-    for candidate in candidates:
-        key = candidate.strip().lower()
-        if key in normalized:
-            return normalized[key]
+def query_for(kind: str, bbox: tuple[float, float, float, float]) -> str:
+    south, west, north, east = bbox
+    box = f"{south},{west},{north},{east}"
+    if kind == "bus":
+        return f"""
+        [out:json][timeout:180];
+        (
+          node["highway"="bus_stop"]({box});
+          node["amenity"="bus_station"]({box});
+          way["amenity"="bus_station"]({box});
+          relation["amenity"="bus_station"]({box});
+        );
+        out center geom;
+        """
+    if kind == "road":
+        return f"""
+        [out:json][timeout:180];
+        (
+          way["highway"]({box});
+        );
+        out geom;
+        """
+    if kind == "ic":
+        return f"""
+        [out:json][timeout:180];
+        (
+          node["highway"="motorway_junction"]({box});
+        );
+        out body;
+        """
+    raise ValueError(kind)
+
+
+def element_point(element: dict):
+    if "lat" in element and "lon" in element:
+        return Point(float(element["lon"]), float(element["lat"]))
+    if "center" in element:
+        return Point(float(element["center"]["lon"]), float(element["center"]["lat"]))
+    if element.get("geometry"):
+        coords = [(pt["lon"], pt["lat"]) for pt in element["geometry"] if "lon" in pt and "lat" in pt]
+        if len(coords) >= 3:
+            return Polygon(coords).representative_point()
+        if coords:
+            return Point(coords[0])
     return None
 
 
+def osm_points(data: dict, tag_filter=None) -> gpd.GeoDataFrame:
+    rows = []
+    seen = set()
+    for element in data.get("elements", []):
+        tags = element.get("tags") or {}
+        if tag_filter and not tag_filter(tags):
+            continue
+        geom = element_point(element)
+        if geom is None:
+            continue
+        osm_id = f"{element.get('type')}/{element.get('id')}"
+        if osm_id in seen:
+            continue
+        seen.add(osm_id)
+        rows.append({"osm_id": osm_id, "name": tags.get("name"), "tags": tags, "geometry": geom})
+    if not rows:
+        return gpd.GeoDataFrame(columns=["osm_id", "name", "tags"], geometry=[], crs=CRS_METRIC)
+    return gpd.GeoDataFrame(rows, geometry="geometry", crs="EPSG:4326").to_crs(CRS_METRIC)
+
+
+def osm_lines(data: dict) -> gpd.GeoDataFrame:
+    rows = []
+    for element in data.get("elements", []):
+        tags = element.get("tags") or {}
+        highway = tags.get("highway")
+        if highway not in ROAD_HIGHWAY_CLASSES:
+            continue
+        coords = [(pt["lon"], pt["lat"]) for pt in element.get("geometry", []) if "lon" in pt and "lat" in pt]
+        if len(coords) < 2:
+            continue
+        rows.append(
+            {
+                "osm_id": f"{element.get('type')}/{element.get('id')}",
+                "name": tags.get("name"),
+                "highway": highway,
+                "geometry": LineString(coords),
+            }
+        )
+    if not rows:
+        return gpd.GeoDataFrame(columns=["osm_id", "name", "highway"], geometry=[], crs=CRS_METRIC)
+    return gpd.GeoDataFrame(rows, geometry="geometry", crs="EPSG:4326").to_crs(CRS_METRIC)
+
+
 def bus_stops_for_area(area_key: str, boundary: gpd.GeoDataFrame) -> dict:
-    source = BUS_SOURCES.get(area_key)
-    if not source:
-        return {"count": None, "density": None, "source": None, "note": "정류장 원자료 경로가 설정되지 않음"}
-    source_label = str(source.relative_to(ROOT)) if source.exists() else str(source)
-    df = read_csv_any(source)
-    if df is None:
-        return {"count": None, "density": None, "source": source_label, "note": "정류장 원자료 없음"}
-
-    lon_col = first_existing(list(df.columns), ["경도", "lon", "lng", "longitude", "x"])
-    lat_col = first_existing(list(df.columns), ["위도", "lat", "latitude", "y"])
-    if not lon_col or not lat_col:
-        return {
-            "count": None,
-            "density": None,
-            "source": source_label,
-            "note": "정류장별 승하차 원자료에 좌표 컬럼이 없어 구역 내 공간 포함 여부를 계산하지 않음",
-        }
-
-    lon = pd.to_numeric(df[lon_col].astype(str).str.strip(), errors="coerce")
-    lat = pd.to_numeric(df[lat_col].astype(str).str.strip(), errors="coerce")
-    valid = df[lon.notna() & lat.notna()].copy()
-    valid[lon_col] = lon[lon.notna() & lat.notna()]
-    valid[lat_col] = lat[lon.notna() & lat.notna()]
-
-    id_col = first_existing(list(valid.columns), ["정류장번호(ID)", "정류소아이디", "정류장ID", "정류소ID", "표준정류장ID"])
-    if id_col:
-        valid = valid.drop_duplicates(subset=[id_col])
-    else:
-        valid = valid.drop_duplicates(subset=[lon_col, lat_col])
-
-    stops = gpd.GeoDataFrame(valid, geometry=gpd.points_from_xy(valid[lon_col], valid[lat_col]), crs="EPSG:4326").to_crs(CRS_METRIC)
+    data = overpass_query(query_for("bus", bbox_for(boundary, 500)), f"{area_key}_osm_v2_bus.json")
+    stops = osm_points(data)
     within = stops[stops.geometry.within(boundary.geometry.iloc[0])]
     area_km2 = float(boundary.geometry.area.iloc[0]) / 1_000_000
     count = int(len(within))
     return {
         "count": count,
         "density": round(count / area_km2, 2) if area_km2 else None,
-        "source": source_label,
-        "note": f"{source.name}의 위경도 좌표를 구역 경계와 공간조인",
+        "source": "OpenStreetMap Overpass API: highway=bus_stop, amenity=bus_station",
+        "note": "OSM bus_stop/bus_station point 또는 대표점을 구역 경계와 공간조인",
     }
 
 
-def find_spatial_files(keywords: list[str]) -> list[Path]:
-    skip_parts = {"node_modules", "dist", "pages_deploy", "public", "data", ".git"}
-    matches = []
-    for path in ROOT.rglob("*"):
-        if path.suffix.lower() not in SPATIAL_EXTENSIONS:
-            continue
-        if any(part in skip_parts for part in path.parts):
-            continue
-        lower = path.name.lower()
-        if any(keyword.lower() in lower for keyword in keywords):
-            matches.append(path)
-    return sorted(matches)
-
-
-def road_metrics(boundary: gpd.GeoDataFrame) -> dict:
-    files = find_spatial_files(ROAD_FILE_KEYWORDS)
-    if not files:
-        return {
-            "length_km": None,
-            "density": None,
-            "source": None,
-            "note": "OSM 도로망 또는 도로 중심선 공간파일이 없어 산정하지 않음",
-        }
+def road_metrics(area_key: str, boundary: gpd.GeoDataFrame) -> dict:
+    data = overpass_query(query_for("road", bbox_for(boundary, 500)), f"{area_key}_osm_v2_roads.json")
+    roads = osm_lines(data)
     area_km2 = float(boundary.geometry.area.iloc[0]) / 1_000_000
-    total_m = 0.0
-    used = []
     geom = boundary.geometry.iloc[0]
-    for path in files:
-        try:
-            roads = gpd.read_file(path).to_crs(CRS_METRIC)
-        except Exception:
-            continue
-        roads = roads[roads.geometry.notna()].copy()
-        if roads.empty:
-            continue
-        total_m += float(roads.geometry.intersection(geom).length.sum())
-        used.append(str(path.relative_to(ROOT)))
+    total_m = float(roads.geometry.intersection(geom).length.sum()) if not roads.empty else 0.0
     length_km = total_m / 1000
     return {
         "length_km": round(length_km, 3),
         "density": round(length_km / area_km2, 3) if area_km2 else None,
-        "source": used,
-        "note": "도로 중심선과 구역 경계 교차 길이 합산",
+        "source": "OpenStreetMap Overpass API: highway=*",
+        "note": f"OSM highway 중 {', '.join(sorted(ROAD_HIGHWAY_CLASSES))}를 구역 경계로 clip 후 길이 합산",
     }
 
 
-def nearest_ic(boundary: gpd.GeoDataFrame) -> dict:
-    files = find_spatial_files(IC_FILE_KEYWORDS)
-    if not files:
+def nearest_ic(area_key: str, boundary: gpd.GeoDataFrame) -> dict:
+    data = overpass_query(query_for("ic", bbox_for(boundary, 30_000)), f"{area_key}_osm_v2_motorway_junctions.json")
+    junctions = osm_points(data, lambda tags: tags.get("highway") == "motorway_junction")
+    centroid = boundary.geometry.iloc[0].centroid
+    best = None
+    for _, row in junctions.iterrows():
+        distance_km = float(row.geometry.distance(centroid)) / 1000
+        candidate = (distance_km, row.get("name"))
+        if best is None or candidate[0] < best[0]:
+            best = candidate
+    if best is None:
         return {
             "distance_km": None,
             "name": None,
-            "source": None,
-            "note": "고속도로 IC 위치 공간파일이 없어 산정하지 않음",
+            "source": "OpenStreetMap Overpass API: highway=motorway_junction",
+            "note": "구역 중심점 30km 범위에서 motorway_junction을 찾지 못함",
         }
-    centroid = boundary.geometry.iloc[0].centroid
-    best = None
-    for path in files:
-        try:
-            gdf = gpd.read_file(path).to_crs(CRS_METRIC)
-        except Exception:
-            continue
-        for _, row in gdf.iterrows():
-            if row.geometry is None:
-                continue
-            distance_km = float(row.geometry.distance(centroid)) / 1000
-            name = row.get("name") or row.get("명칭") or row.get("IC명") or row.get("시설명")
-            candidate = (distance_km, name, path)
-            if best is None or candidate[0] < best[0]:
-                best = candidate
-    if best is None:
-        return {"distance_km": None, "name": None, "source": [str(p.relative_to(ROOT)) for p in files], "note": "IC geometry 없음"}
     return {
         "distance_km": round(best[0], 2),
         "name": best[1] or "이름 없음",
-        "source": str(best[2].relative_to(ROOT)),
-        "note": "구역 중심점과 최근접 IC geometry 간 거리",
+        "source": "OpenStreetMap Overpass API: highway=motorway_junction",
+        "note": "구역 중심점과 최근접 OSM motorway_junction 노드 간 거리",
     }
 
 
@@ -184,8 +238,8 @@ def main() -> None:
         boundary = load_boundary(key)
         area_km2 = float(boundary.geometry.area.iloc[0]) / 1_000_000
         bus = bus_stops_for_area(key, boundary)
-        road = road_metrics(boundary)
-        ic = nearest_ic(boundary)
+        road = road_metrics(key, boundary)
+        ic = nearest_ic(key, boundary)
         station = station_area_ratios(boundary, stations)
 
         row = {
@@ -210,6 +264,11 @@ def main() -> None:
             "station_count_1km": station["station_count_1000m"],
             "station_catchment_source": "subway_network/network/nodes.tsv; 2023-12-31 기준 운영 중 역",
             "method": "구역 경계는 EPSG:5186에서 면적·거리 계산 후 결과 GeoJSON/JSON 저장",
+            "osm_calculation": {
+                "bus_stop_density": "OSM highway=bus_stop, amenity=bus_station 개수 / 구역면적(km²)",
+                "road_network_density": "OSM highway 도로 중심선의 구역 내부 총연장(km) / 구역면적(km²)",
+                "nearest_ic": "구역 중심점에서 최근접 OSM highway=motorway_junction까지 거리(km)",
+            },
         }
         rows.append(row)
         validation[key] = row
