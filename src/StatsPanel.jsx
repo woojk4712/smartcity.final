@@ -68,7 +68,7 @@ export function StatsPanel({ summary, validation, mode }) {
               <Metric icon={UsersRound} label="구역 종사자" value={row.display_workers} suffix="명" />
               <Metric icon={Building2} label="건축물 수" value={row.building_count} suffix="개" />
               <Metric icon={Building2} label="평균 용적률" value={row.avg_floor_area_ratio} suffix="%" />
-              <Metric icon={Building2} label="건축 점유율" value={row.building_footprint_area_ratio === null || row.building_footprint_area_ratio === undefined ? null : row.building_footprint_area_ratio * 100} suffix="%" digits={2} />
+              <Metric icon={Building2} label="건축 점유율(필지)" value={row.building_footprint_area_ratio === null || row.building_footprint_area_ratio === undefined ? null : row.building_footprint_area_ratio * 100} suffix="%" digits={2} />
               <Metric icon={MapPinned} label="미건축 필지 면적비" value={row.vacant_parcel_area_ratio === null || row.vacant_parcel_area_ratio === undefined ? null : row.vacant_parcel_area_ratio * 100} suffix="%" digits={2} />
               <Metric icon={TrainFront} label="30분 통근권 인구" value={row.commuter_population_30min} suffix="명" />
               <Metric icon={TrainFront} label="60분 통근권 인구" value={row.commuter_population_60min} suffix="명" />
@@ -105,7 +105,7 @@ export function StatsPanel({ summary, validation, mode }) {
                 ['사업체수(개)', (r) => format.format(r.display_businesses)],
                 ['건축물 수(개)', (r) => format.format(r.building_count ?? 0)],
                 ['건축물 연면적 합계(m²)', (r) => format.format(r.building_gross_floor_area_m2 ?? 0)],
-                ['건축 점유율(%)', (r) => valueOrMissing(r.building_footprint_area_ratio === null || r.building_footprint_area_ratio === undefined ? null : r.building_footprint_area_ratio * 100, decimal)],
+                ['건축 점유율: 건축물 존재 필지 면적비(%)', (r) => valueOrMissing(r.building_footprint_area_ratio === null || r.building_footprint_area_ratio === undefined ? null : r.building_footprint_area_ratio * 100, decimal)],
                 ['미건축 필지 면적비(%)', (r) => valueOrMissing(r.vacant_parcel_area_ratio === null || r.vacant_parcel_area_ratio === undefined ? null : r.vacant_parcel_area_ratio * 100, decimal)],
                 ['직주비(종사자/인구)', (r) => decimal.format(r.job_housing_ratio ?? 0)],
                 ['LUM', (r) => decimal.format(r.landuse_mix_index ?? 0)],

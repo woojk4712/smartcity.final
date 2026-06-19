@@ -83,6 +83,53 @@ def building_metrics(area_key: str) -> dict:
     }
 
 
+def development_realization_metrics(area_key: str, parcels: gpd.GeoDataFrame) -> dict:
+    parcels_metric = parcels.to_crs(load_boundary(area_key).crs)
+    parcel_pnu_col = "PNU_NORM" if "PNU_NORM" in parcels_metric.columns else "PNU"
+    non_developable_suffixes = {"도", "공", "녹", "학", "철", "천", "구", "제", "수"}
+    parcels_metric["lot_suffix"] = parcels_metric["JIBUN"].astype(str).str.replace(" ", "", regex=False).str[-1]
+    developable = parcels_metric[~parcels_metric["lot_suffix"].isin(non_developable_suffixes)].copy()
+    total_area = float(developable.geometry.area.sum())
+
+    building_path = OUT / "buildings" / f"{area_key}_buildings.geojson"
+    built_pnus = set()
+    building_footprint_area = 0.0
+    if building_path.exists():
+        buildings = gpd.read_file(building_path)
+        for col in ["matched_parcel_pnu", "PNU", "pnu"]:
+            if col in buildings.columns:
+                built_pnus.update(str(value) for value in buildings[col].dropna().tolist() if str(value).strip())
+        if "building_area_m2" in buildings.columns:
+            for value in buildings["building_area_m2"]:
+                try:
+                    number = float(value or 0)
+                    if not math.isnan(number):
+                        building_footprint_area += number
+                except (TypeError, ValueError):
+                    pass
+
+    built_parcels = developable[developable[parcel_pnu_col].astype(str).isin(built_pnus)].copy()
+    vacant_parcels = developable[~developable[parcel_pnu_col].astype(str).isin(built_pnus)].copy()
+    built_area = float(built_parcels.geometry.area.sum())
+    vacant_area = float(vacant_parcels.geometry.area.sum())
+    return {
+        "built_parcel_count": int(len(built_parcels)),
+        "vacant_parcel_count": int(len(vacant_parcels)),
+        "built_parcel_area_m2": round(built_area, 1),
+        "vacant_parcel_area_m2": round(vacant_area, 1),
+        "built_parcel_area_ratio": round(built_area / total_area, 4) if total_area else None,
+        "vacant_parcel_area_ratio": round(vacant_area / total_area, 4) if total_area else None,
+        "building_footprint_area_m2": round(building_footprint_area, 1),
+        "building_footprint_area_ratio": round(building_footprint_area / total_area, 4) if total_area else None,
+        "developable_parcel_count": int(len(developable)),
+        "developable_parcel_area_m2": round(total_area, 1),
+        "excluded_non_developable_parcel_count": int(len(parcels_metric) - len(developable)),
+        "excluded_non_developable_parcel_area_m2": round(float(parcels_metric.geometry.area.sum()) - total_area, 1),
+        "excluded_non_developable_suffixes": sorted(non_developable_suffixes),
+        "method": "building-register matched developable parcel area / developable analysis parcel area; road, park, green, school, rail, stream, ditch, embankment and utility lots are excluded from denominator",
+    }
+
+
 def catchment_meta_features(item: dict, key: str) -> int:
     meta = item.get("allocation_meta", {}).get(key, {})
     if "features" in meta:
@@ -148,6 +195,7 @@ def main() -> None:
         area_m2 = float(geom.area)
         parcels = gpd.read_file(OUT / "parcels" / f"{key}_matched_parcels.geojson")
         buildings = building_metrics(key)
+        realization = development_realization_metrics(key, parcels)
 
         allocated_population, pop_meta = allocated_sgis_for_geometry(key, geom, SGIS_KEYWORDS["population"])
         allocated_households, household_meta = allocated_sgis_for_geometry(key, geom, SGIS_KEYWORDS["households"])
@@ -210,10 +258,19 @@ def main() -> None:
                 "building_count": buildings["count"],
                 "building_gross_floor_area_m2": buildings["gross_floor_area_m2"],
                 "building_land_area_m2": buildings["land_area_m2"],
-                "building_footprint_area_ratio": functional_report.get("building_footprint_area_ratio"),
-                "vacant_parcel_area_ratio": functional_report.get("vacant_parcel_area_ratio"),
-                "vacant_parcel_count": functional_report.get("vacant_parcel_count"),
-                "vacant_parcel_area_m2": functional_report.get("vacant_parcel_area_m2"),
+                "building_footprint_area_ratio": realization.get("built_parcel_area_ratio"),
+                "actual_building_footprint_area_ratio": realization.get("building_footprint_area_ratio"),
+                "building_footprint_area_m2": realization.get("building_footprint_area_m2"),
+                "built_parcel_count": realization.get("built_parcel_count"),
+                "built_parcel_area_m2": realization.get("built_parcel_area_m2"),
+                "developable_parcel_count": realization.get("developable_parcel_count"),
+                "developable_parcel_area_m2": realization.get("developable_parcel_area_m2"),
+                "excluded_non_developable_parcel_count": realization.get("excluded_non_developable_parcel_count"),
+                "excluded_non_developable_parcel_area_m2": realization.get("excluded_non_developable_parcel_area_m2"),
+                "vacant_parcel_area_ratio": realization.get("vacant_parcel_area_ratio"),
+                "vacant_parcel_count": realization.get("vacant_parcel_count"),
+                "vacant_parcel_area_m2": realization.get("vacant_parcel_area_m2"),
+                "development_realization_method": realization.get("method"),
                 "job_housing_ratio": job_housing_ratio,
                 "nearest_station_m": access.get(key, {}).get("nearest_station_m"),
                 "station_count_2km": access.get(key, {}).get("station_count_2km", 0),
@@ -260,10 +317,20 @@ def main() -> None:
             "building_count": buildings["count"],
             "building_gross_floor_area_m2": buildings["gross_floor_area_m2"],
             "building_land_area_m2": buildings["land_area_m2"],
-            "building_footprint_area_ratio": functional_report.get("building_footprint_area_ratio"),
-            "vacant_parcel_area_ratio": functional_report.get("vacant_parcel_area_ratio"),
-            "vacant_parcel_count": functional_report.get("vacant_parcel_count"),
-            "vacant_parcel_area_m2": functional_report.get("vacant_parcel_area_m2"),
+            "building_footprint_area_ratio": realization.get("built_parcel_area_ratio"),
+            "actual_building_footprint_area_ratio": realization.get("building_footprint_area_ratio"),
+            "building_footprint_area_m2": realization.get("building_footprint_area_m2"),
+            "built_parcel_count": realization.get("built_parcel_count"),
+            "built_parcel_area_m2": realization.get("built_parcel_area_m2"),
+            "developable_parcel_count": realization.get("developable_parcel_count"),
+            "developable_parcel_area_m2": realization.get("developable_parcel_area_m2"),
+            "excluded_non_developable_parcel_count": realization.get("excluded_non_developable_parcel_count"),
+            "excluded_non_developable_parcel_area_m2": realization.get("excluded_non_developable_parcel_area_m2"),
+            "excluded_non_developable_suffixes": realization.get("excluded_non_developable_suffixes"),
+            "vacant_parcel_area_ratio": realization.get("vacant_parcel_area_ratio"),
+            "vacant_parcel_count": realization.get("vacant_parcel_count"),
+            "vacant_parcel_area_m2": realization.get("vacant_parcel_area_m2"),
+            "development_realization_method": realization.get("method"),
             "parcel_count": int(len(parcels)),
             "aggregation_count_population": pop_meta.get("features", 0),
             "aggregation_count_households": household_meta.get("features", 0),
@@ -297,10 +364,12 @@ def main() -> None:
             "bus_stop_density_per_km2": spatial.get(key, {}).get("bus_stop_density_per_km2"),
             "bus_stop_source": spatial.get(key, {}).get("bus_stop_source"),
             "bus_stop_note": spatial.get(key, {}).get("bus_stop_note"),
+            "bus_stop_validation": spatial.get(key, {}).get("bus_stop_validation"),
             "road_length_km": spatial.get(key, {}).get("road_length_km"),
             "road_network_density_km_per_km2": spatial.get(key, {}).get("road_network_density_km_per_km2"),
             "road_source": spatial.get(key, {}).get("road_source"),
             "road_note": spatial.get(key, {}).get("road_note"),
+            "road_validation": spatial.get(key, {}).get("road_validation"),
             "nearest_highway_ic_km": spatial.get(key, {}).get("nearest_highway_ic_km"),
             "nearest_highway_ic_name": spatial.get(key, {}).get("nearest_highway_ic_name"),
             "ic_source": spatial.get(key, {}).get("ic_source"),

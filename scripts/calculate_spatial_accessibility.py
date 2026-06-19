@@ -168,11 +168,22 @@ def bus_stops_for_area(area_key: str, boundary: gpd.GeoDataFrame) -> dict:
     within = stops[stops.geometry.within(boundary.geometry.iloc[0])]
     area_km2 = float(boundary.geometry.area.iloc[0]) / 1_000_000
     count = int(len(within))
+    duplicate_ids = int(len(stops) - stops["osm_id"].nunique()) if not stops.empty else 0
     return {
         "count": count,
         "density": round(count / area_km2, 2) if area_km2 else None,
         "source": "OpenStreetMap Overpass API: highway=bus_stop, amenity=bus_station",
         "note": "OSM bus_stop/bus_station point 또는 대표점을 구역 경계와 공간조인",
+        "validation": {
+            "query_bbox_buffer_m": 500,
+            "source_crs": "EPSG:4326",
+            "calculation_crs": CRS_METRIC,
+            "raw_osm_element_count": int(len(data.get("elements", []))),
+            "unique_point_count": int(len(stops)),
+            "duplicate_osm_id_count": duplicate_ids,
+            "within_boundary_count": count,
+            "method": "OSM point/representative point transformed to metric CRS, counted only when within analysis polygon",
+        },
     }
 
 
@@ -181,13 +192,27 @@ def road_metrics(area_key: str, boundary: gpd.GeoDataFrame) -> dict:
     roads = osm_lines(data)
     area_km2 = float(boundary.geometry.area.iloc[0]) / 1_000_000
     geom = boundary.geometry.iloc[0]
-    total_m = float(roads.geometry.intersection(geom).length.sum()) if not roads.empty else 0.0
+    duplicate_ids = int(len(roads) - roads["osm_id"].nunique()) if not roads.empty else 0
+    clipped = roads.geometry.intersection(geom) if not roads.empty else []
+    clipped_lengths = [float(line.length) for line in clipped if not line.is_empty] if not roads.empty else []
+    total_m = sum(clipped_lengths)
     length_km = total_m / 1000
     return {
         "length_km": round(length_km, 3),
         "density": round(length_km / area_km2, 3) if area_km2 else None,
         "source": "OpenStreetMap Overpass API: highway=*",
         "note": f"OSM highway 중 {', '.join(sorted(ROAD_HIGHWAY_CLASSES))}를 구역 경계로 clip 후 길이 합산",
+        "validation": {
+            "query_bbox_buffer_m": 500,
+            "source_crs": "EPSG:4326",
+            "calculation_crs": CRS_METRIC,
+            "raw_osm_element_count": int(len(data.get("elements", []))),
+            "unique_road_way_count": int(len(roads)),
+            "duplicate_osm_id_count": duplicate_ids,
+            "clipped_segment_count": int(sum(1 for length in clipped_lengths if length > 0)),
+            "method": "OSM highway LineString transformed to metric CRS, clipped by polygon, summed once per unique OSM way id",
+            "boundary_overlap_note": "도로 중심선이 경계선 위에 놓인 경우 intersection 길이에 포함된다. 동일 OSM way id 중복은 제거되어 있으며, 왕복 분리 차로는 별도 centerline으로 집계된다.",
+        },
     }
 
 
@@ -291,10 +316,12 @@ def main() -> None:
             "bus_stop_density_per_km2": bus["density"],
             "bus_stop_source": bus["source"],
             "bus_stop_note": bus["note"],
+            "bus_stop_validation": bus["validation"],
             "road_length_km": road["length_km"],
             "road_network_density_km_per_km2": road["density"],
             "road_source": road["source"],
             "road_note": road["note"],
+            "road_validation": road["validation"],
             "nearest_highway_ic_km": ic["distance_km"],
             "nearest_highway_ic_name": ic["name"],
             "ic_source": ic["source"],
