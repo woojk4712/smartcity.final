@@ -168,40 +168,40 @@
     "boundary_source": "건축물대장, 연속지적도, 토지이용계획, SGIS 2023 집계자료를 결합한 실제 업무기능 기반 경계",
     "boundary_definition": "청라국제업무지구는 계획상 국제업무용지뿐 아니라 업무시설·상업시설 연면적, 중심·일반상업지역, 금융업무·하나드림타운 관련 필지, 사업체·종사자 집적을 종합해 실제 업무기능이 형성된 업무·상업 중심지로 정의한다.",
     "boundary_basis": "실제 업무기능 기반 필지 클러스터",
-    "boundary_note": "순수 공동주택, 학교, 공원, 단독주택 위주 필지와 업무시설이 없는 상업주거지역은 제외하고, 업무시설 또는 상업시설 비중이 높은 필지를 클러스터링하였다.",
+    "boundary_note": "순수 공동주택, 학교, 공원, 녹지, 단독주택 위주 필지, 업무시설이 없는 상업주거지역, 음악분수제어실 등 독립 시설관리용 부속건축물 필지는 제외하고, 업무시설 또는 상업시설 비중이 높은 필지를 클러스터링하였다.",
     "boundary_area_calculation_method": "구역 면적은 경계 GeoJSON을 EPSG:5179 좌표계로 변환한 뒤 산출하였다.",
-    "boundary_area_m2": 1155646.4,
-    "boundary_area_km2": 1.1556,
-    "allocated_population": 16218.1,
-    "allocated_households": 4472.3,
-    "allocated_workers": 5981.8,
-    "allocated_businesses": 1878.8,
-    "display_population": 16218,
-    "display_households": 4472,
-    "display_workers": 5982,
-    "display_businesses": 1879,
+    "boundary_area_m2": 465791.1,
+    "boundary_area_km2": 0.4658,
+    "allocated_population": 15796.7,
+    "allocated_households": 4326.2,
+    "allocated_workers": 4927.3,
+    "allocated_businesses": 1610.0,
+    "display_population": 15797,
+    "display_households": 4326,
+    "display_workers": 4927,
+    "display_businesses": 1610,
     "commuter_population_30min": 585864,
     "commuter_population_60min": 604946,
     "commuter_workers_30min": 75623,
     "commuter_workers_60min": 87674,
-    "population_density_per_km2": 14033.8,
+    "population_density_per_km2": 33913.7,
     "landuse_mix_index": 0.58,
-    "zoning_landuse_mix_index": 0.499,
+    "zoning_landuse_mix_index": 0.456,
     "building_landuse_mix_index": 0.58,
     "lum_method": "building_main_use_gross_floor_area",
-    "avg_floor_area_ratio": 494.9,
-    "building_count": 106,
-    "building_gross_floor_area_m2": 2157650.1,
-    "building_land_area_m2": 978279.6,
-    "job_housing_ratio": 0.369,
-    "nearest_station_m": 2719.2,
+    "avg_floor_area_ratio": 499.7,
+    "building_count": 105,
+    "building_gross_floor_area_m2": 2157483.3,
+    "building_land_area_m2": 285110.6,
+    "job_housing_ratio": 0.312,
+    "nearest_station_m": 2684.1,
     "station_count_2km": 0,
-    "compactness": 0.027,
-    "bus_stop_count": 5,
-    "bus_stop_density_per_km2": 4.33,
-    "road_length_km": 4.419,
-    "road_network_density_km_per_km2": 3.824,
-    "nearest_highway_ic_km": 2.09,
+    "compactness": 0.019,
+    "bus_stop_count": 4,
+    "bus_stop_density_per_km2": 8.59,
+    "road_length_km": 1.648,
+    "road_network_density_km_per_km2": 3.539,
+    "nearest_highway_ic_km": 2.22,
     "nearest_highway_ic_name": "남청라",
     "station_area_ratio_500m": 0.0,
     "station_area_ratio_1km": 0.0,
@@ -226,7 +226,7 @@
         "line_name": "공항철도",
         "lon": 126.624645,
         "lat": 37.556485,
-        "distance_to_boundary_m": 1780.9
+        "distance_to_boundary_m": 1884.8
       },
       {
         "station_id": "290",
@@ -257,7 +257,7 @@
       "crs_metric": "EPSG:5186",
       "station_source_crs": "subway_network nodes.tsv geometry_wkt EPSG:5179 -> metric CRS",
       "buffer_method": "station point buffer in metric CRS, intersect with business district polygon, divide by polygon area",
-      "boundary_area_m2": 1155646.4,
+      "boundary_area_m2": 465791.1,
       "nearest_station_distance_m": 1618.5,
       "result": "0% is expected because no active station point buffer intersects the polygon within 1km"
     },
@@ -265,26 +265,26 @@
       "population": {
         "method": "aggregation_area_weighted",
         "sgis_code": "23080",
-        "features": 29,
-        "overlap_area_m2": 1155646.4
+        "features": 27,
+        "overlap_area_m2": 465791.1
       },
       "households": {
         "method": "aggregation_area_weighted",
         "sgis_code": "23080",
-        "features": 29,
-        "overlap_area_m2": 1155646.4
+        "features": 27,
+        "overlap_area_m2": 465791.1
       },
       "workers": {
         "method": "aggregation_area_weighted",
         "sgis_code": "23080",
-        "features": 29,
-        "overlap_area_m2": 1155646.4
+        "features": 27,
+        "overlap_area_m2": 465791.1
       },
       "businesses": {
         "method": "aggregation_area_weighted",
         "sgis_code": "23080",
-        "features": 29,
-        "overlap_area_m2": 1155646.4
+        "features": 27,
+        "overlap_area_m2": 465791.1
       }
     },
     "allocation_method": "aggregation_area_weighted_internal; display values rounded",
@@ -292,15 +292,28 @@
       "filter_rule": "실제 업무기능 기반: 건축물 주용도·연면적, 용도지역, 금융/하나 키워드, 업무상업 중심 지번대 종합",
       "source_note": "본 시스템은 계획상 용지 기준이 아니라 실제 업무기능이 형성된 지역을 기준으로 업무지구를 정의하였다.",
       "candidate_before_count": 2176,
-      "selected_count": 118,
+      "selected_count": 117,
       "candidate_area_m2": 6920060.8,
-      "selected_area_m2": 1155646.4,
-      "included_building_count": 106,
+      "selected_area_m2": 465791.1,
+      "included_building_count": 105,
       "included_office_gfa_m2": 1589553.6,
-      "included_commercial_gfa_m2": 1927807.4,
-      "included_businesses": 1878.8,
-      "included_workers": 5981.8,
+      "included_commercial_gfa_m2": 1927640.6,
+      "included_businesses": 1610.0,
+      "included_workers": 4927.3,
       "score_threshold": 3.0,
+      "exclusion_rule": "공원·녹지·학교·단독주택·공동주택과 음악분수제어실 등 시설관리용 독립 필지는 제외한다. 단, 업무시설 필지 내부 부속건축물은 필지의 주 기능이 업무·상업이면 유지한다.",
+      "excluded_facility_management_parcels": [
+        {
+          "pnu": "2826012200101060002",
+          "jibun": "106-2 공",
+          "reason": "상업시설 입지, 일반상업지역, 청라 업무상업 중심 지번대, 공원녹지 시설관리용 독립 필지 제외",
+          "area_m2": 689855.3,
+          "building_names": [
+            "음악분수제어실"
+          ]
+        }
+      ],
+      "excluded_facility_management_count": 1,
       "selected_reason_counts": {
         "업무시설 연면적 10,000㎡ 이상, 상업시설 연면적 10,000㎡ 이상, 일반상업지역, 청라국제도시역/금융업무 후보 지번대": 17,
         "업무시설 연면적 10,000㎡ 이상, 상업시설 연면적 10,000㎡ 이상, 중심상업지역, 청라 업무상업 중심 지번대": 16,
@@ -309,19 +322,19 @@
         "상업시설 입지, 일반상업지역, 청라국제도시역/금융업무 후보 지번대": 10,
         "상업시설 연면적 10,000㎡ 이상, 일반상업지역": 9,
         "업무시설 입지, 상업시설 입지": 6,
-        "업무시설 연면적 10,000㎡ 이상, 일반상업지역": 4,
         "상업시설 연면적 10,000㎡ 이상, 중심상업지역, 청라 업무상업 중심 지번대": 4,
         "상업시설 연면적 10,000㎡ 이상, 일반상업지역, 청라국제도시역/금융업무 후보 지번대": 4,
-        "업무시설 입지, 일반상업지역": 2,
+        "업무시설 연면적 10,000㎡ 이상, 일반상업지역": 4,
         "업무시설 입지, 상업시설 입지, 일반상업지역": 2,
         "상업시설 연면적 10,000㎡ 이상, 준주거지역, 청라국제도시역/금융업무 후보 지번대": 2,
         "업무시설 입지, 중심상업지역": 2,
-        "상업시설 입지, 일반상업지역, 청라 업무상업 중심 지번대": 1,
+        "업무시설 입지, 일반상업지역": 2,
         "업무시설 연면적 10,000㎡ 이상, 중심상업지역, 청라 업무상업 중심 지번대": 1,
         "업무시설 입지, 상업시설 입지, 청라 업무상업 중심 지번대": 1,
         "업무시설 입지, 청라국제도시역/금융업무 후보 지번대, 하나·금융업무 키워드": 1,
         "업무시설 연면적 10,000㎡ 이상, 중심상업지역": 1,
-        "업무시설 연면적 10,000㎡ 이상": 1
+        "업무시설 연면적 10,000㎡ 이상": 1,
+        "업무시설 연면적 10,000㎡ 이상, 일반상업지역, 청라국제도시역/금융업무 후보 지번대": 1
       }
     },
     "boundary_comparison": {
@@ -338,31 +351,31 @@
       },
       "current": {
         "boundary_basis": "실제 업무기능 기반 필지 클러스터",
-        "area_m2": 1155646.4,
-        "businesses": 1879,
-        "workers": 5982,
-        "population": 16218,
-        "job_housing_ratio": 0.369,
+        "area_m2": 465791.1,
+        "businesses": 1610,
+        "workers": 4927,
+        "population": 15797,
+        "job_housing_ratio": 0.312,
         "landuse_mix_index": 0.58,
-        "parcel_count": 118,
-        "building_count": 106
+        "parcel_count": 117,
+        "building_count": 105
       },
       "change": {
         "area_m2": {
-          "absolute": 100974.0,
-          "ratio": 0.0957
+          "absolute": -588881.3,
+          "ratio": -0.5584
         },
         "businesses": {
-          "absolute": 1075.0,
-          "ratio": 1.3371
+          "absolute": 806.0,
+          "ratio": 1.0025
         },
         "workers": {
-          "absolute": 3595.0,
-          "ratio": 1.5061
+          "absolute": 2540.0,
+          "ratio": 1.0641
         },
         "job_housing_ratio": {
-          "absolute": 0.085,
-          "ratio": 0.2993
+          "absolute": 0.028,
+          "ratio": 0.0986
         },
         "landuse_mix_index": {
           "absolute": 0.198,

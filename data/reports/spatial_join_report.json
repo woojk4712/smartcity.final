@@ -14,10 +14,10 @@
   {
     "area_key": "cheongna",
     "building_source": "C:\\Users\\SAMSUNG\\OneDrive\\바탕 화면\\smartcity_final\\청라\\인천광역시 서구 경서동 일원_건축물대장\\건축물조서.xlsx",
-    "building_count": 106,
-    "matched_by_pnu": 106,
+    "building_count": 105,
+    "matched_by_pnu": 105,
     "matched_by_lot": 0,
-    "unmatched_register_rows": 1811,
+    "unmatched_register_rows": 1830,
     "unmatched_sample": [
       {
         "PNU": "2826012200101270006",
@@ -63,6 +63,16 @@
         "PNU": "2826012200101450013",
         "lot": "145-13",
         "building_name": "단독주택 1"
+      },
+      {
+        "PNU": "2826012200101060002",
+        "lot": "106-2",
+        "building_name": "음악분수제어실"
+      },
+      {
+        "PNU": "2826012200101060002",
+        "lot": "106-2",
+        "building_name": "화장실A"
       },
       {
         "PNU": "2826012200101840001",
@@ -158,20 +168,10 @@
         "PNU": "2826012200101120013",
         "lot": "112-13",
         "building_name": "1"
-      },
-      {
-        "PNU": "2826012200101840001",
-        "lot": "184-1",
-        "building_name": "청라엘에이치 419동"
-      },
-      {
-        "PNU": "2826012200101840001",
-        "lot": "184-1",
-        "building_name": "청라엘에이치 420동"
       }
     ],
-    "gross_floor_area_m2": 2157650.1,
-    "avg_floor_area_ratio": 494.9,
+    "gross_floor_area_m2": 2157483.3,
+    "avg_floor_area_ratio": 499.7,
     "method": "building register xlsx matched to analysis parcels by PNU, falling back to lot number"
   }
 ]

@@ -14,9 +14,9 @@
     "area_key": "cheongna",
     "label": "청라국제업무지구",
     "source": "computed_boundary_geometry_plus_sample_missing_indicators",
-    "area_km2": 1.156,
-    "perimeter_km": 23.202,
-    "compactness": 0.027,
+    "area_km2": 0.466,
+    "perimeter_km": 17.549,
+    "compactness": 0.019,
     "road_density_km_per_km2": null,
     "official_company_count": null,
     "note": "도로망, 공식 입주기업, 매출 지표 원자료가 추가되면 실제값으로 대체"
