@@ -384,7 +384,7 @@
     "analysis_date": "2023-12-31",
     "origin_station_id": "313",
     "origin_station_name": "청라국제도시",
-    "nearest_station_m": 2684.1,
+    "nearest_station_m": 2724.1,
     "station_count_2km": 0,
     "commuter_catchment_minutes": 60,
     "cumulative_accessibility": [

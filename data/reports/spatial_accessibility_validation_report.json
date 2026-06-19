@@ -118,16 +118,16 @@
   "cheongna": {
     "area_key": "cheongna",
     "label": "청라국제업무지구",
-    "area_km2": 0.4658,
-    "bus_stop_count": 4,
-    "bus_stop_density_per_km2": 8.59,
+    "area_km2": 1.4583,
+    "bus_stop_count": 51,
+    "bus_stop_density_per_km2": 34.97,
     "bus_stop_source": "OpenStreetMap Overpass API: highway=bus_stop, amenity=bus_station",
     "bus_stop_note": "OSM bus_stop/bus_station point 또는 대표점을 구역 경계와 공간조인",
-    "road_length_km": 1.648,
-    "road_network_density_km_per_km2": 3.539,
+    "road_length_km": 36.645,
+    "road_network_density_km_per_km2": 25.128,
     "road_source": "OpenStreetMap Overpass API: highway=*",
     "road_note": "OSM highway 중 living_street, motorway, motorway_link, primary, primary_link, residential, secondary, secondary_link, service, tertiary, tertiary_link, trunk, trunk_link, unclassified를 구역 경계로 clip 후 길이 합산",
-    "nearest_highway_ic_km": 2.22,
+    "nearest_highway_ic_km": 1.97,
     "nearest_highway_ic_name": "남청라",
     "ic_source": "OpenStreetMap Overpass API: highway=motorway_junction",
     "ic_note": "구역 중심점과 최근접 OSM motorway_junction 노드 간 거리",
@@ -146,15 +146,7 @@
         "line_name": "인천2호선",
         "lon": 126.675395,
         "lat": 37.525095,
-        "distance_to_boundary_m": 1618.5
-      },
-      {
-        "station_id": "313",
-        "station_name": "청라국제도시",
-        "line_name": "공항철도",
-        "lon": 126.624645,
-        "lat": 37.556485,
-        "distance_to_boundary_m": 1884.8
+        "distance_to_boundary_m": 1456.8
       },
       {
         "station_id": "290",
@@ -162,15 +154,15 @@
         "line_name": "인천2호선",
         "lon": 126.676843,
         "lat": 37.543981,
-        "distance_to_boundary_m": 1896.0
+        "distance_to_boundary_m": 1539.7
       },
       {
-        "station_id": "292",
-        "station_name": "가정중앙시장",
-        "line_name": "인천2호선",
-        "lon": 126.676819,
-        "lat": 37.517585,
-        "distance_to_boundary_m": 2241.7
+        "station_id": "313",
+        "station_name": "청라국제도시",
+        "line_name": "공항철도",
+        "lon": 126.624645,
+        "lat": 37.556485,
+        "distance_to_boundary_m": 1613.9
       },
       {
         "station_id": "289",
@@ -178,15 +170,23 @@
         "line_name": "인천2호선",
         "lon": 126.677153,
         "lat": 37.552028,
-        "distance_to_boundary_m": 2543.9
+        "distance_to_boundary_m": 2003.8
+      },
+      {
+        "station_id": "292",
+        "station_name": "가정중앙시장",
+        "line_name": "인천2호선",
+        "lon": 126.676819,
+        "lat": 37.517585,
+        "distance_to_boundary_m": 2025.3
       }
     ],
     "station_zero_result_validation": {
       "crs_metric": "EPSG:5186",
       "station_source_crs": "subway_network nodes.tsv geometry_wkt EPSG:5179 -> metric CRS",
       "buffer_method": "station point buffer in metric CRS, intersect with business district polygon, divide by polygon area",
-      "boundary_area_m2": 465791.1,
-      "nearest_station_distance_m": 1618.5,
+      "boundary_area_m2": 1458334.4,
+      "nearest_station_distance_m": 1456.8,
       "result": "0% is expected because no active station point buffer intersects the polygon within 1km"
     },
     "station_catchment_source": "subway_network/network/nodes.tsv; 2023-12-31 기준 운영 중 역",
