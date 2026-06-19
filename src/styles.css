@@ -422,6 +422,49 @@ input {
   gap: 6px;
 }
 
+.accordion-panel {
+  padding: 0;
+  overflow: hidden;
+}
+
+.accordion-summary {
+  min-height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 16px;
+  cursor: pointer;
+  color: #172033;
+  font-size: 16px;
+  font-weight: 700;
+  list-style: none;
+}
+
+.accordion-summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion-summary::after {
+  content: "+";
+  margin-left: auto;
+  color: #64748b;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.accordion-panel[open] .accordion-summary {
+  border-bottom: 1px solid #e4e8ef;
+}
+
+.accordion-panel[open] .accordion-summary::after {
+  content: "-";
+}
+
+.accordion-panel .table-scroll,
+.accordion-panel .validation-grid {
+  margin: 16px;
+}
+
 .validation-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(240px, 1fr));

@@ -136,8 +136,10 @@ export function StatsPanel({ summary, validation, mode }) {
         </div>
       </section>
 
-      <section className="table-panel">
-        <h2>구역계 정의 및 출처</h2>
+      <details className="table-panel accordion-panel">
+        <summary className="accordion-summary">
+          <span>구역계 정의 및 출처 보기</span>
+        </summary>
         <div className="table-scroll">
           <table className="comparison-table boundary-table">
             <thead>
@@ -166,12 +168,13 @@ export function StatsPanel({ summary, validation, mode }) {
             </tbody>
           </table>
         </div>
-      </section>
+      </details>
 
-      <section className="table-panel">
-        <h2>
-          <ClipboardCheck size={16} /> 데이터 검증
-        </h2>
+      <details className="table-panel accordion-panel">
+        <summary className="accordion-summary">
+          <ClipboardCheck size={16} />
+          <span>데이터 검증 상세 보기</span>
+        </summary>
         <div className="validation-grid">
           {rows.map((row) => {
             const item = validation?.[row.area_key] || {};
@@ -224,7 +227,7 @@ export function StatsPanel({ summary, validation, mode }) {
             );
           })}
         </div>
-      </section>
+      </details>
     </>
   );
 }
